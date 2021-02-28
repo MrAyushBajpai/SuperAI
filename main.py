@@ -259,6 +259,21 @@ while True:
     elif 'how' in cmd.lower() or 'when' in cmd.lower():
         webbrowser.open('https://www.google.com/search?q=' + cmd)
 
+    elif 'morning' in cmd.lower():
+        print('Good Morning!')
+        speak('Good Morning')
+
+    elif 'afternoon' in cmd.lower():
+        print('Good Afternoon!')
+        speak('Good Afternoon')
+    elif 'evening' in cmd.lower():
+        print('Good Evening!')
+        speak('Good Evening')
+
+    elif 'night' in cmd.lower():
+        print('Good Night!')
+        speak('Good Night')
+
     elif 'even' in cmd.lower() or 'odd' in cmd.lower():
         speak('Enter the number to check for even or odd')
         print('Enter the number to check for even or odd')
