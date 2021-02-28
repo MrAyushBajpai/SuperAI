@@ -1,6 +1,7 @@
 # This is a simple help assistant/ help bot that allows to do basic things with it.
 
 # All the necessary imports
+from itertools import chain, cycle
 import random
 import time
 import sys
@@ -202,11 +203,40 @@ while True:
         speak('Time is' + strtime)
 
     elif 'what' in cmd.lower():
-        query = list(cmd.lower().split())
+        query = list(chain(*zip(cmd.split(), cycle(' '))))[:-1]
         if 'what' in query:
             tmp1 = query.index('what')
             if 'is' in query:
                 tmp2 = query.index('is')
+                if tmp1 + 1 == tmp2:
+                    del query[tmp1:tmp2 + 1]
+            elif 'are' in query:
+                tmp2 = query.index('are')
+                if tmp1 + 1 == tmp2:
+                    del query[tmp1:tmp2 + 1]
+            else:
+                del query[tmp1]
+        query = ''.join(query)
+        try:
+            speak('Just a second')
+            results = wikipedia.summary(cmd, sentences=2)
+            print(results)
+            speak('According to Wikipedia')
+            speak(results)
+        except Exception:
+            webbrowser.open('https://www.google.com/search?q=' + cmd)
+
+    elif 'who' in cmd.lower():
+        print(cmd)
+        query = list(chain(*zip(cmd.split(), cycle(' '))))[:-1]
+        if 'who' in query:
+            tmp1 = query.index('who')
+            if 'is' in query:
+                tmp2 = query.index('is')
+                if tmp1 + 2 == tmp2 or tmp1 + 1 == tmp2:
+                    del query[tmp1:tmp2 + 1]
+            elif 'are' in query:
+                tmp2 = query.index('are')
                 if tmp1 + 1 == tmp2:
                     del query[tmp1:tmp2 + 1]
             else:
