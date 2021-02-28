@@ -256,7 +256,7 @@ while True:
         except Exception:
             webbrowser.open('https://www.google.com/search?q=' + cmd)
 
-    elif 'how' in cmd.lower():
+    elif 'how' in cmd.lower() or 'when' in cmd.lower():
         webbrowser.open('https://www.google.com/search?q=' + cmd)
 
     elif 'even' in cmd.lower() or 'odd' in cmd.lower():
