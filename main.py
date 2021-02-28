@@ -11,7 +11,8 @@ import speech_recognition
 import wikipedia
 import datetime
 import webbrowser
-
+import pyttsx3.drivers
+import pyttsx3.drivers.sapi5
 try:
     import module
 except ModuleNotFoundError:
