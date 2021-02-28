@@ -2,6 +2,7 @@
 
 # All the necessary imports
 from itertools import chain, cycle
+import platform
 import random
 import time
 import sys
@@ -105,6 +106,10 @@ while True:
         elif num == 6:
             print('With you on my side, I am unstoppable!')
             speak('With you on my side, I am unstoppable!')
+
+    elif 'os' in cmd.lower() or 'operating system' in cmd.lower():
+        print(platform.system(), platform.release(), platform.version())
+        speak(platform.system() + platform.release() + platform.version())
 
     elif 'hello' in cmd.lower() or 'hi' in cmd.lower() or 'howdy' in cmd.lower() or cmd.lower() == 'hey':
         num = randomgenerator(1, 6)
@@ -250,6 +255,9 @@ while True:
             speak(results)
         except Exception:
             webbrowser.open('https://www.google.com/search?q=' + cmd)
+
+    elif 'how' in cmd.lower():
+        webbrowser.open('https://www.google.com/search?q=' + cmd)
 
     elif 'even' in cmd.lower() or 'odd' in cmd.lower():
         speak('Enter the number to check for even or odd')
