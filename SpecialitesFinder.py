@@ -22,3 +22,10 @@ def primechecker(number):
             tester = False
             break
     return tester
+
+
+def evenorodd(number):
+    if number % 2 == 0:
+        return True
+    else:
+        return False

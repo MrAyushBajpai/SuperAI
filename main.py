@@ -251,6 +251,22 @@ while True:
         except Exception:
             webbrowser.open('https://www.google.com/search?q=' + cmd)
 
+    elif 'even' in cmd.lower() or 'odd' in cmd.lower():
+        speak('Enter the number to check for even or odd')
+        print('Enter the number to check for even or odd')
+        temp = recognize()
+        try:
+            temp = int(temp)
+            if SpecialitesFinder.evenorodd(temp):
+                print('It is an even number.')
+                speak('It is an even number.')
+            else:
+                print('It is an odd number')
+                speak('It is an odd number')
+        except ValueError:
+            print('Whatever you entered seems not be an integer, so yeah.')
+            speak('Whatever you entered seems not be an integer, so yeah.')
+
     elif 'quit' in cmd.lower() or 'exit' in cmd.lower() or ('close' in cmd.lower() and 'program' in cmd.lower()):
         print('Closing the Program. Hope to see you soon!')
         speak('Closing the Program. Hope to see you soon!')
