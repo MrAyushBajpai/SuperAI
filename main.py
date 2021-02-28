@@ -107,7 +107,7 @@ while True:
             print('With you on my side, I am unstoppable!')
             speak('With you on my side, I am unstoppable!')
 
-    elif 'os' in cmd.lower() or 'operating system' in cmd.lower():
+    elif 'operating system' in cmd.lower():
         print(platform.system(), platform.release(), platform.version())
         speak(platform.system() + platform.release() + platform.version())
 
