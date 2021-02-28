@@ -54,7 +54,6 @@ def recognize():
         print('Listening')
         r.pause_threshold = 1
         audio = r.listen(source)
-
     try:
         print('Processing....')
         command = r.recognize_google(audio, language='en-in')
@@ -202,17 +201,19 @@ while True:
         print(datetime.datetime.now().strftime('%H:%M'))
         speak('Time is' + strtime)
 
-    elif 'what is' in cmd.lower() or 'who is' in cmd.lower():
+    elif 'what' in cmd.lower():
+        query = list(cmd.lower().split())
+        if 'what' in query:
+            tmp1 = query.index('what')
+            if 'is' in query:
+                tmp2 = query.index('is')
+                if tmp1 + 1 == tmp2:
+                    del query[tmp1:tmp2 + 1]
+            else:
+                del query[tmp1]
+        query = ''.join(query)
         try:
-            cmd = cmd.lower().replace('what is ', '')
-        except Exception:
-            pass
-        try:
-            cmd = cmd.lower().replace('who is ', '')
-        except Exception:
-            pass
-        speak('Just a second')
-        try:
+            speak('Just a second')
             results = wikipedia.summary(cmd, sentences=2)
             print(results)
             speak('According to Wikipedia')
