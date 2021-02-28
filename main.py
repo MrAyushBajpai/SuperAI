@@ -202,6 +202,17 @@ while True:
         print(datetime.datetime.now().strftime('%H:%M'))
         speak('Time is' + strtime)
 
+    elif 'what is' in cmd.lower():
+        cmd = cmd.lower().replace('what is ', '')
+        speak('Just a second')
+        try:
+            results = wikipedia.summary(cmd, sentences=2)
+            print(results)
+            speak('According to Wikipedia')
+            speak(results)
+        except Exception:
+            webbrowser.open('https://www.google.com/search?q=' + cmd)
+
     elif 'quit' in cmd.lower() or 'exit' in cmd.lower() or ('close' in cmd.lower() and 'program' in cmd.lower()):
         print('Closing the Program. Hope to see you soon!')
         speak('Closing the Program. Hope to see you soon!')
