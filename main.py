@@ -202,8 +202,15 @@ while True:
         print(datetime.datetime.now().strftime('%H:%M'))
         speak('Time is' + strtime)
 
-    elif 'what is' in cmd.lower():
-        cmd = cmd.lower().replace('what is ', '')
+    elif 'what is' in cmd.lower() or 'who is' in cmd.lower():
+        try:
+            cmd = cmd.lower().replace('what is ', '')
+        except Exception:
+            pass
+        try:
+            cmd = cmd.lower().replace('who is ', '')
+        except Exception:
+            pass
         speak('Just a second')
         try:
             results = wikipedia.summary(cmd, sentences=2)
