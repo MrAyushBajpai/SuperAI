@@ -41,6 +41,7 @@ config.read(configfilepath)
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
+osinfo = platform.system(), platform.release(), platform.version()
 
 
 # All the necessary functions
@@ -111,7 +112,7 @@ while True:
             speak('With you on my side, I am unstoppable!')
 
     elif 'operating system' in cmd.lower():
-        print(platform.system(), platform.release(), platform.version())
+        print()
         speak(platform.system() + platform.release() + platform.version())
 
     elif 'hello' in cmd.lower() or 'hi' in cmd.lower() or 'howdy' in cmd.lower() or cmd.lower() == 'hey':
@@ -138,42 +139,53 @@ while True:
     elif 'palindrom' in cmd.lower() and 'check' in cmd.lower():
         speak('Enter the string to check for Palindrome')
         temp = recognize()
+        module.logcat('Checking ' + str(temp) + ' for Palindrome', False)
         if SpecialitesFinder.palindromechecker(temp):
             print('It is a palindrome string')
             speak('It is a palindrome string')
+            module.logcat(str(temp) + ' is a palindrome string', False)
         else:
             print('It is not a palindrome string')
             speak('It is not a palindrome string')
+            module.logcat(str(temp) + ' is not a palindrome string', False)
 
     elif 'armstrong' in cmd.lower() and 'check' in cmd.lower():
         speak('Enter the number to check for Armstrong: ')
         temp = recognize()
+        module.logcat('Checking ' + str(temp) + ' for amrstrong number', False)
         try:
             temp = int(temp)
             if SpecialitesFinder.armstrongchecker(temp):
                 print('It is an Armstrong Number')
                 speak('It is an Armstrong Number')
+                module.logcat(str(temp) + ' is an armstrong number', False)
             else:
                 print('It is not an Armstrong Number')
                 speak('It is not an Armstrong Number')
+                module.logcat(str(temp) + ' is not an armstrong number', False)
         except ValueError:
             print('Only an Integer can be an armstrong number, so this is not an Armstrong number')
             speak('Only an Integer can be an armstrong number, so this is not an Armstrong number')
+            module.logcat('ValueError while checking for Armstrong Number: Given Value - ' + str(temp), True)
 
     elif 'prime' in cmd.lower() and 'check' in cmd.lower():
         speak('Enter the number to check for Prime Number')
         temp = recognize()
+        module.logcat('Checking ' + str(temp) + ' for prime or not')
         try:
             temp = int(temp)
             if SpecialitesFinder.primechecker(temp):
                 print('It is a Prime Number.')
                 speak('It is a Prime Number.')
+                module.logcat(str(temp) + ' is a prime number')
             else:
                 print('It is not a Prime Number')
                 speak('It is not a Prime Number')
+                module.logcat(str(temp) + ' is not a prime number')
         except ValueError:
             print('Only an integer can be a Prime Number, so this is not a Prime Number')
             speak('Only an integer can be a Prime Number, so this is not a Prime Number')
+            module.logcat('ValueError while checking for prime: Given Value - ' + str(temp), True)
 
     elif 'wikipedia' in cmd.lower():
         speak('Searching Wikipedia!....')
@@ -182,33 +194,45 @@ while True:
         print(results)
         speak('According to Wikipedia')
         speak(results)
+        module.logcat('Search Wikipedia for ' + query, False)
 
     elif 'open' in cmd.lower() and 'google' in cmd.lower():
         speak('Opening Google')
-        webbrowser.open('https://www.google.com')
+        url = 'https://www.google.com'
+        module.logcat('Opening "' + url + '" in webbrowser')
+        webbrowser.open(url)
 
     elif 'open' in cmd.lower() and 'youtube' in cmd.lower():
         speak('Opening YouTube')
-        webbrowser.open('https://www.youtube.com')
+        url = 'https://www.youtube.com'
+        module.logcat('Opening "' + url + '" in webbrowser')
+        webbrowser.open(url)
 
     elif 'open' in cmd.lower() and ('stack' in cmd.lower() or 'overflow' in cmd.lower()):
         speak('Opening Stack Overflow')
-        webbrowser.open('https://stackoverflow.com/')
+        url = 'https://stackoverflow.com/'
+        module.logcat('Opening "' + url + '" in webbrowser')
+        webbrowser.open(url)
 
     elif 'open' in cmd.lower() and ('git' in cmd.lower() and 'hub' in cmd.lower()):
         speak('Opening GitHub')
-        webbrowser.open('https://github.com')
+        url = 'https://github.com'
+        module.logcat('Opening "' + url + '" in webbrowser')
+        webbrowser.open(url)
 
     elif 'search' in cmd.lower():
         cmd = cmd.lower().replace('search', '')
         cmd.replace(' ', '+')
         speak('Searching')
-        webbrowser.open('https://www.google.com/search?q=' + cmd)
+        url = 'https://www.google.com/search?q=' + cmd
+        module.logcat('Opening "' + url + '" in webbrowser')
+        webbrowser.open(url)
 
     elif 'time' in cmd.lower():
         strtime = datetime.datetime.now().strftime('%H %M')
         print(datetime.datetime.now().strftime('%H:%M'))
         speak('Time is' + strtime)
+        module.logcat('Retrived Current time as ' + strtime, False)
 
     elif 'what' in cmd.lower():
         query = list(chain(*zip(cmd.split(), cycle(' '))))[:-1]
@@ -231,8 +255,11 @@ while True:
             print(results)
             speak('According to Wikipedia')
             speak(results)
+            module.logcat('Loaded from wikipedia about ' + query, False)
         except Exception:
-            webbrowser.open('https://www.google.com/search?q=' + cmd)
+            url = 'https://www.google.com/search?q=' + cmd
+            module.logcat('Opening "' + url + '" in webbrowser', False)
+            webbrowser.open(url)
 
     elif 'who' in cmd.lower():
         print(cmd)
@@ -256,11 +283,16 @@ while True:
             print(results)
             speak('According to Wikipedia')
             speak(results)
+            module.logcat('Loaded from wikipedia about ' + query, False)
         except Exception:
-            webbrowser.open('https://www.google.com/search?q=' + cmd)
+            url = 'https://www.google.com/search?q=' + cmd
+            module.logcat('Opening "' + url + '" in webbrowser', False)
+            webbrowser.open(url)
 
     elif 'how' in cmd.lower() or 'when' in cmd.lower():
-        webbrowser.open('https://www.google.com/search?q=' + cmd)
+        url = 'https://www.google.com/search?q=' + cmd
+        module.logcat('Opening "' + url + '" in webbrowser', False)
+        webbrowser.open(url)
 
     elif 'morning' in cmd.lower():
         print('Good Morning!')
@@ -281,14 +313,17 @@ while True:
         speak('Enter the number to check for even or odd')
         print('Enter the number to check for even or odd')
         temp = recognize()
+        module.logcat('Checking ' + str(temp) + ' for even or odd.', False)
         try:
             temp = int(temp)
             if SpecialitesFinder.evenorodd(temp):
                 print('It is an even number.')
                 speak('It is an even number.')
+                module.logcat(str(temp) + ' is an even number', False)
             else:
                 print('It is an odd number')
                 speak('It is an odd number')
+                module.logcat(str(temp) + ' is an odd number', False)
         except ValueError:
             print('Whatever you entered seems not be an integer, so yeah.')
             speak('Whatever you entered seems not be an integer, so yeah.')
@@ -296,4 +331,5 @@ while True:
     elif 'quit' in cmd.lower() or 'exit' in cmd.lower() or ('close' in cmd.lower() and 'program' in cmd.lower()):
         print('Closing the Program. Hope to see you soon!')
         speak('Closing the Program. Hope to see you soon!')
+        module.logcat('Program Exit!', False)
         sys.exit()
