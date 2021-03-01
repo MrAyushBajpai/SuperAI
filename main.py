@@ -92,6 +92,7 @@ def recognize():
     with speech_recognition.Microphone() as source:
         print('Listening')
         r.pause_threshold = int(config.get('data-value', 'pause_threshold'))
+        r.energy_threshold = int(config.get('data-value', 'energy_threshold'))
         audio = r.listen(source)
 
     try:
