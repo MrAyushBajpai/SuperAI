@@ -6,15 +6,41 @@ import platform
 import random
 import time
 import sys
-# noinspection PyUnresolvedReferences
-import pyttsx3
-import speech_recognition
-import wikipedia
 import datetime
 import webbrowser
-# noinspection PyUnresolvedReferences
-import pyttsx3.drivers
-import pyttsx3.drivers.sapi5
+import os
+
+try:
+    import wikipedia
+except ModuleNotFoundError:
+    print('The Library wikipedia was not found. Try pip install wikipedia')
+    time.sleep(5)
+    webbrowser.open('https://pypi.org/project/wikipedia/')
+    time.sleep(2)
+    sys.exit()
+
+try:
+    # noinspection PyUnresolvedReferences
+    import pyttsx3
+    # noinspection PyUnresolvedReferences
+    import pyttsx3.drivers
+    # noinspection PyUnresolvedReferences
+    import pyttsx3.drivers.sapi5
+except ModuleNotFoundError:
+    print('The Library pyttsx3 was not found. Try pip install pyttsx3')
+    time.sleep(5)
+    webbrowser.open('https://pypi.org/project/pyttsx3/')
+    time.sleep(2)
+    sys.exit()
+
+try:
+    import speech_recognition
+except ModuleNotFoundError:
+    print('The Library speech_recognition was not found. Try pip install speechRecognition')
+    time.sleep(5)
+    webbrowser.open('https://pypi.org/project/SpeechRecognition/')
+    time.sleep(2)
+    sys.exit()
 try:
     import module
 except ModuleNotFoundError:
@@ -29,8 +55,6 @@ except ModuleNotFoundError:
     time.sleep(5)
     sys.exit()
 
-import os
-
 # Setting up configparser
 import configparser
 config = configparser.ConfigParser()
@@ -41,7 +65,9 @@ config.read(configfilepath)
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
-osinfo = platform.system(), platform.release(), platform.version()
+osinfo = str(platform.system()) + str(platform.release()) + str(platform.version())
+module.logcat('START!!')
+module.logcat('System is ' + str(osinfo))
 
 
 # All the necessary functions
@@ -56,10 +82,12 @@ def speak(statement):
 
 def recognize():
     r = speech_recognition.Recognizer()
+
     with speech_recognition.Microphone() as source:
         print('Listening')
         r.pause_threshold = 1
         audio = r.listen(source)
+
     try:
         print('Processing....')
         command = r.recognize_google(audio, language='en-in')
