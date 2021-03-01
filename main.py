@@ -46,6 +46,8 @@ try:
 except ModuleNotFoundError:
     print('The file module.py was not found! Are You Sure it is in the same directory?')
     time.sleep(5)
+    webbrowser.open('https://github.com/MrAyushBajpai/SuperAI/blob/master/module.py')
+    time.sleep(2)
     sys.exit()
 
 try:
@@ -53,6 +55,8 @@ try:
 except ModuleNotFoundError:
     print('The file SpecialitesFinder was not found! Are You Sure it is in the same directory?')
     time.sleep(5)
+    webbrowser.open('https://github.com/MrAyushBajpai/SuperAI/blob/master/SpecialitesFinder.py')
+    time.sleep(2)
     sys.exit()
 
 # Setting up configparser
@@ -66,6 +70,8 @@ engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
 osinfo = str(platform.system()) + str(platform.release()) + str(platform.version())
+
+# One time Code
 module.logcat('START!!')
 module.logcat('System is ' + str(osinfo))
 
