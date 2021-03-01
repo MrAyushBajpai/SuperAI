@@ -6,11 +6,13 @@ import platform
 import random
 import time
 import sys
+# noinspection PyUnresolvedReferences
 import pyttsx3
 import speech_recognition
 import wikipedia
 import datetime
 import webbrowser
+# noinspection PyUnresolvedReferences
 import pyttsx3.drivers
 import pyttsx3.drivers.sapi5
 try:
