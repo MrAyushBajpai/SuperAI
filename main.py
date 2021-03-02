@@ -61,6 +61,7 @@ except ModuleNotFoundError:
 
 # Setting up configparser
 import configparser
+
 config = configparser.ConfigParser()
 configfilepath = r'config.cfg'
 config.read(configfilepath)
@@ -260,36 +261,43 @@ while True:
         cmd = cmd.lower()
         query = list(chain(*zip(cmd.split(), cycle(' '))))[:-1]
         tester = 'google'
+        min_dist = len(query) + 1
         for i in ['google', 'bing', 'yahoo', 'duckduckgo', 'duck']:
             if i in query:
-                if (query.index('search') == query.index(i) + 1) \
-                        or (query.index('search') == query.index(i) + 2):
-                    del query[query.index('search'):query.index(i) + 1]
-                    tester = i
-                elif (query.index(i) == query.index('search') + 1) \
-                        or (query.index(i) == query.index('search') + 2):
-                    del query[query.index(i):query.index('search')]
-                    tester = i
-        if tester == 'google':
-            del query[query.index('search')]
-        query = ''.join(query)
+                tester = i
+                for index in range(len(query)):
+                    if query[index] == 'search':
+                        for search in range(len(query)):
+                            if query[search] == i:
+                                curr = abs(index - search) - 1
+                                if curr < min_dist:
+                                    min_dist = curr
+        if min_dist <= 4 and min_dist < (len(query) + 1):
+            del query[query.index('search'):query.index(tester) + 1]
+
         speak('Searching')
         if tester == 'google':
+            del query[query.index('search')]
+            query = ''.join(query)
             url = 'https://www.google.com/search?q=' + query
             module.logcat('Opening "' + url + '" in webbrowser')
             webbrowser.open(url)
         elif tester == 'bing':
+            query = ''.join(query)
             url = 'https://www.bing.com/search?q=' + query
             module.logcat('Opening "' + url + '" in webbrowser')
             webbrowser.open(url)
         elif tester == 'duckduckgo' or tester == 'duck':
+            query = ''.join(query)
             url = 'https://duckduckgo.com/?q=' + query
             module.logcat('Opening "' + url + '" in webbrowser')
             webbrowser.open(url)
         elif tester == 'yahoo':
+            query = ''.join(query)
             url = 'https://search.yahoo.com/search?p=' + query
             module.logcat('Opening "' + url + '" in webbrowser')
             webbrowser.open(url)
+
     elif 'time' in cmd.lower():
         strtime = datetime.datetime.now().strftime('%H %M')
         print(datetime.datetime.now().strftime('%H:%M'))
