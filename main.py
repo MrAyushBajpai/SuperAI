@@ -97,6 +97,7 @@ def recognize():
 
     try:
         print('Processing....')
+        print(' ')
         command = r.recognize_google(audio, language='en-in')
         print('User Command - ', command)
     except Exception:
@@ -256,13 +257,39 @@ while True:
         webbrowser.open(url)
 
     elif 'search' in cmd.lower():
-        cmd = cmd.lower().replace('search', '')
-        cmd.replace(' ', '+')
+        cmd = cmd.lower()
+        query = list(chain(*zip(cmd.split(), cycle(' '))))[:-1]
+        tester = 'google'
+        for i in ['google', 'bing', 'yahoo', 'duckduckgo', 'duck']:
+            if i in query:
+                if (query.index('search') == query.index(i) + 1) \
+                        or (query.index('search') == query.index(i) + 2):
+                    del query[query.index('search'):query.index(i) + 1]
+                    tester = i
+                elif (query.index(i) == query.index('search') + 1) \
+                        or (query.index(i) == query.index('search') + 2):
+                    del query[query.index(i):query.index('search')]
+                    tester = i
+        if tester == 'google':
+            del query[query.index('search')]
+        query = ''.join(query)
         speak('Searching')
-        url = 'https://www.google.com/search?q=' + cmd
-        module.logcat('Opening "' + url + '" in webbrowser')
-        webbrowser.open(url)
-
+        if tester == 'google':
+            url = 'https://www.google.com/search?q=' + query
+            module.logcat('Opening "' + url + '" in webbrowser')
+            webbrowser.open(url)
+        elif tester == 'bing':
+            url = 'https://www.bing.com/search?q=' + query
+            module.logcat('Opening "' + url + '" in webbrowser')
+            webbrowser.open(url)
+        elif tester == 'duckduckgo' or tester == 'duck':
+            url = 'https://duckduckgo.com/?q=' + query
+            module.logcat('Opening "' + url + '" in webbrowser')
+            webbrowser.open(url)
+        elif tester == 'yahoo':
+            url = 'https://search.yahoo.com/search?p=' + query
+            module.logcat('Opening "' + url + '" in webbrowser')
+            webbrowser.open(url)
     elif 'time' in cmd.lower():
         strtime = datetime.datetime.now().strftime('%H %M')
         print(datetime.datetime.now().strftime('%H:%M'))
