@@ -70,7 +70,7 @@ config.read(configfilepath)
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[int(config.get('data-value', 'voice'))].id)
-osinfo = str(platform.system()) + str(platform.release()) + str(platform.version())
+osinfo = str(platform.system()) + ' ' + str(platform.release()) + ' ' + str(platform.version())
 
 # One time Code
 module.logcat('START!!')
