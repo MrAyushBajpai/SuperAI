@@ -127,51 +127,51 @@ while True:
             continue
 
     # Checks for the entered command
-    if 'how are you' in cmd.lower() or 'how you doing' in cmd.lower():
-        num = randomgenerator(1, 6)
-        if num == 1:
-            print('I am doing Great! How are You?')
-            speak('I am doing Great! How are You?')
-        elif num == 2:
-            print('I am constantly updated. That\'s how I am doing.')
-            speak('I am constantly updated. That is how I am doing.')
-        elif num == 3:
-            print('My Existence is non emotional. The only thing I do good is probably helping you.')
-            speak('My Existence is non emotional. The only thing I do good is probably helping you.')
-        elif num == 4:
-            print('I may not be the best, but I certainly enjoy being myself!')
-            speak('I may not be the best, but I certainly enjoy being myself!')
-        elif num == 5:
-            print('Good.')
-            speak('Good')
-        elif num == 6:
-            print('With you on my side, I am unstoppable!')
-            speak('With you on my side, I am unstoppable!')
+    if 'search' in cmd.lower():
+        cmd = cmd.lower()
+        query = list(chain(*zip(cmd.split(), cycle(' '))))[:-1]
+        tester = 'google'
+        min_dist = len(query) + 1
+        for i in ['google', 'bing', 'yahoo', 'duckduckgo', 'duck']:
+            if i in query:
+                tester = i
+                for index in range(len(query)):
+                    if query[index] == 'search':
+                        for search in range(len(query)):
+                            if query[search] == i:
+                                curr = abs(index - search) - 1
+                                if curr < min_dist:
+                                    min_dist = curr
+        if min_dist <= 4 and min_dist < (len(query) + 1):
+            del query[query.index('search'):query.index(tester) + 1]
+        if query[0] == ' ':
+            del query[0]
+        speak('Searching')
+        if tester == 'google':
+            del query[query.index('search')]
+            query = ''.join(query)
+            url = 'https://www.google.com/search?q=' + query
+            module.logcat('Opening "' + url + '" in webbrowser')
+            webbrowser.open(url)
+        elif tester == 'bing':
+            query = ''.join(query)
+            url = 'https://www.bing.com/search?q=' + query
+            module.logcat('Opening "' + url + '" in webbrowser')
+            webbrowser.open(url)
+        elif tester == 'duckduckgo' or tester == 'duck':
+            query = ''.join(query)
+            url = 'https://duckduckgo.com/?q=' + query
+            module.logcat('Opening "' + url + '" in webbrowser')
+            webbrowser.open(url)
+        elif tester == 'yahoo':
+            query = ''.join(query)
+            url = 'https://search.yahoo.com/search?p=' + query
+            module.logcat('Opening "' + url + '" in webbrowser')
+            webbrowser.open(url)
 
     elif 'operating system' in cmd.lower():
         print()
         speak(platform.system() + platform.release() + platform.version())
-
-    elif 'hello' in cmd.lower() or 'hi' in cmd.lower() or 'howdy' in cmd.lower() or cmd.lower() == 'hey':
-        num = randomgenerator(1, 6)
-        if num == 1:
-            print('Hello! How are You?')
-            speak('Hello! How are You?')
-        elif num == 2:
-            print('Hieeee!')
-            speak('Hieeee!')
-        elif num == 3:
-            print('Hey! How you doing?')
-            speak('Hey! How you doing?')
-        elif num == 4:
-            print('Howdy Mate!')
-            speak('Howdy Mate!')
-        elif num == 5:
-            print('Greetings!')
-            speak('Greetings!')
-        elif num == 6:
-            print('Bonjour! Nice to Meet You.')
-            speak('Bonjour! Nice to Meet You.')
 
     elif 'palindrom' in cmd.lower() and 'check' in cmd.lower():
         speak('Enter the string to check for Palindrome')
@@ -256,48 +256,6 @@ while True:
         url = 'https://github.com'
         module.logcat('Opening "' + url + '" in webbrowser')
         webbrowser.open(url)
-
-    elif 'search' in cmd.lower():
-        cmd = cmd.lower()
-        query = list(chain(*zip(cmd.split(), cycle(' '))))[:-1]
-        tester = 'google'
-        min_dist = len(query) + 1
-        for i in ['google', 'bing', 'yahoo', 'duckduckgo', 'duck']:
-            if i in query:
-                tester = i
-                for index in range(len(query)):
-                    if query[index] == 'search':
-                        for search in range(len(query)):
-                            if query[search] == i:
-                                curr = abs(index - search) - 1
-                                if curr < min_dist:
-                                    min_dist = curr
-        if min_dist <= 4 and min_dist < (len(query) + 1):
-            del query[query.index('search'):query.index(tester) + 1]
-        if query[0] == ' ':
-            del query[0]
-        speak('Searching')
-        if tester == 'google':
-            del query[query.index('search')]
-            query = ''.join(query)
-            url = 'https://www.google.com/search?q=' + query
-            module.logcat('Opening "' + url + '" in webbrowser')
-            webbrowser.open(url)
-        elif tester == 'bing':
-            query = ''.join(query)
-            url = 'https://www.bing.com/search?q=' + query
-            module.logcat('Opening "' + url + '" in webbrowser')
-            webbrowser.open(url)
-        elif tester == 'duckduckgo' or tester == 'duck':
-            query = ''.join(query)
-            url = 'https://duckduckgo.com/?q=' + query
-            module.logcat('Opening "' + url + '" in webbrowser')
-            webbrowser.open(url)
-        elif tester == 'yahoo':
-            query = ''.join(query)
-            url = 'https://search.yahoo.com/search?p=' + query
-            module.logcat('Opening "' + url + '" in webbrowser')
-            webbrowser.open(url)
 
     elif 'time' in cmd.lower():
         strtime = datetime.datetime.now().strftime('%H %M')
@@ -398,6 +356,48 @@ while True:
         except ValueError:
             print('Whatever you entered seems not be an integer, so yeah.')
             speak('Whatever you entered seems not be an integer, so yeah.')
+
+    elif 'how are you' in cmd.lower() or 'how you doing' in cmd.lower():
+        num = randomgenerator(1, 6)
+        if num == 1:
+            print('I am doing Great! How are You?')
+            speak('I am doing Great! How are You?')
+        elif num == 2:
+            print('I am constantly updated. That\'s how I am doing.')
+            speak('I am constantly updated. That is how I am doing.')
+        elif num == 3:
+            print('My Existence is non emotional. The only thing I do good is probably helping you.')
+            speak('My Existence is non emotional. The only thing I do good is probably helping you.')
+        elif num == 4:
+            print('I may not be the best, but I certainly enjoy being myself!')
+            speak('I may not be the best, but I certainly enjoy being myself!')
+        elif num == 5:
+            print('Good.')
+            speak('Good')
+        elif num == 6:
+            print('With you on my side, I am unstoppable!')
+            speak('With you on my side, I am unstoppable!')
+
+    elif 'hello' in cmd.lower() or 'hi' in cmd.lower() or 'howdy' in cmd.lower() or cmd.lower() == 'hey':
+        num = randomgenerator(1, 6)
+        if num == 1:
+            print('Hello! How are You?')
+            speak('Hello! How are You?')
+        elif num == 2:
+            print('Hieeee!')
+            speak('Hieeee!')
+        elif num == 3:
+            print('Hey! How you doing?')
+            speak('Hey! How you doing?')
+        elif num == 4:
+            print('Howdy Mate!')
+            speak('Howdy Mate!')
+        elif num == 5:
+            print('Greetings!')
+            speak('Greetings!')
+        elif num == 6:
+            print('Bonjour! Nice to Meet You.')
+            speak('Bonjour! Nice to Meet You.')
 
     elif 'quit' in cmd.lower() or 'exit' in cmd.lower() or ('close' in cmd.lower() and 'program' in cmd.lower()):
         print('Closing the Program. Hope to see you soon!')
