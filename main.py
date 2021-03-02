@@ -274,7 +274,8 @@ while True:
                                     min_dist = curr
         if min_dist <= 4 and min_dist < (len(query) + 1):
             del query[query.index('search'):query.index(tester) + 1]
-
+        if query[0] == ' ':
+            del query[0]
         speak('Searching')
         if tester == 'google':
             del query[query.index('search')]
