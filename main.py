@@ -323,21 +323,6 @@ while True:
         module.logcat('Opening "' + url + '" in webbrowser', False)
         webbrowser.open(url)
 
-    elif 'morning' in cmd.lower():
-        print('Good Morning!')
-        speak('Good Morning')
-
-    elif 'afternoon' in cmd.lower():
-        print('Good Afternoon!')
-        speak('Good Afternoon')
-    elif 'evening' in cmd.lower():
-        print('Good Evening!')
-        speak('Good Evening')
-
-    elif 'night' in cmd.lower():
-        print('Good Night!')
-        speak('Good Night')
-
     elif 'even' in cmd.lower() or 'odd' in cmd.lower():
         speak('Enter the number to check for even or odd')
         print('Enter the number to check for even or odd')
@@ -398,6 +383,21 @@ while True:
         elif num == 6:
             print('Bonjour! Nice to Meet You.')
             speak('Bonjour! Nice to Meet You.')
+
+    elif 'morning' in cmd.lower():
+        print('Good Morning!')
+        speak('Good Morning')
+
+    elif 'afternoon' in cmd.lower():
+        print('Good Afternoon!')
+        speak('Good Afternoon')
+    elif 'evening' in cmd.lower():
+        print('Good Evening!')
+        speak('Good Evening')
+
+    elif 'night' in cmd.lower():
+        print('Good Night!')
+        speak('Good Night')
 
     elif 'quit' in cmd.lower() or 'exit' in cmd.lower() or ('close' in cmd.lower() and 'program' in cmd.lower()):
         print('Closing the Program. Hope to see you soon!')
