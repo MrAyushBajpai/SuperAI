@@ -103,6 +103,7 @@ def recognize():
         print('User Command - ', command)
     except Exception:
         print('Can you repeat please')
+        print(' ')
         return 'None'
     return command
 
@@ -120,7 +121,7 @@ while True:
     while True:
         cmd = recognize()
         print(' ')
-        if cmd != '':
+        if cmd != 'None':
             module.logcat('Command Entered is -- ' + cmd)
             break
         else:
@@ -176,53 +177,76 @@ while True:
     elif 'palindrom' in cmd.lower() and 'check' in cmd.lower():
         speak('Enter the string to check for Palindrome')
         temp = recognize()
-        module.logcat('Checking ' + str(temp) + ' for Palindrome', False)
-        if SpecialitesFinder.palindromechecker(temp):
-            print('It is a palindrome string')
-            speak('It is a palindrome string')
-            module.logcat(str(temp) + ' is a palindrome string', False)
-        else:
-            print('It is not a palindrome string')
-            speak('It is not a palindrome string')
-            module.logcat(str(temp) + ' is not a palindrome string', False)
+        if temp != 'None':
+            module.logcat('Checking ' + str(temp) + ' for Palindrome', False)
+            if SpecialitesFinder.palindromechecker(temp):
+                print('It is a palindrome string')
+                speak('It is a palindrome string')
+                module.logcat(str(temp) + ' is a palindrome string', False)
+            else:
+                print('It is not a palindrome string')
+                speak('It is not a palindrome string')
+                module.logcat(str(temp) + ' is not a palindrome string', False)
 
     elif 'armstrong' in cmd.lower() and 'check' in cmd.lower():
         speak('Enter the number to check for Armstrong: ')
         temp = recognize()
-        module.logcat('Checking ' + str(temp) + ' for amrstrong number', False)
-        try:
-            temp = int(temp)
-            if SpecialitesFinder.armstrongchecker(temp):
-                print('It is an Armstrong Number')
-                speak('It is an Armstrong Number')
-                module.logcat(str(temp) + ' is an armstrong number', False)
-            else:
-                print('It is not an Armstrong Number')
-                speak('It is not an Armstrong Number')
-                module.logcat(str(temp) + ' is not an armstrong number', False)
-        except ValueError:
-            print('Only an Integer can be an armstrong number, so this is not an Armstrong number')
-            speak('Only an Integer can be an armstrong number, so this is not an Armstrong number')
-            module.logcat('ValueError while checking for Armstrong Number: Given Value - ' + str(temp), True)
+        if temp != 'None':
+            module.logcat('Checking ' + str(temp) + ' for amrstrong number', False)
+            try:
+                temp = int(temp)
+                if SpecialitesFinder.armstrongchecker(temp):
+                    print('It is an Armstrong Number')
+                    speak('It is an Armstrong Number')
+                    module.logcat(str(temp) + ' is an armstrong number', False)
+                else:
+                    print('It is not an Armstrong Number')
+                    speak('It is not an Armstrong Number')
+                    module.logcat(str(temp) + ' is not an armstrong number', False)
+            except ValueError:
+                print('Only an Integer can be an armstrong number, so this is not an Armstrong number')
+                speak('Only an Integer can be an armstrong number, so this is not an Armstrong number')
+                module.logcat('ValueError while checking for Armstrong Number: Given Value - ' + str(temp), True)
 
     elif 'prime' in cmd.lower() and 'check' in cmd.lower():
         speak('Enter the number to check for Prime Number')
         temp = recognize()
-        module.logcat('Checking ' + str(temp) + ' for prime or not')
-        try:
-            temp = int(temp)
-            if SpecialitesFinder.primechecker(temp):
-                print('It is a Prime Number.')
-                speak('It is a Prime Number.')
-                module.logcat(str(temp) + ' is a prime number')
-            else:
-                print('It is not a Prime Number')
-                speak('It is not a Prime Number')
-                module.logcat(str(temp) + ' is not a prime number')
-        except ValueError:
-            print('Only an integer can be a Prime Number, so this is not a Prime Number')
-            speak('Only an integer can be a Prime Number, so this is not a Prime Number')
-            module.logcat('ValueError while checking for prime: Given Value - ' + str(temp), True)
+        if temp != 'None':
+            module.logcat('Checking ' + str(temp) + ' for prime or not')
+            try:
+                temp = int(temp)
+                if SpecialitesFinder.primechecker(temp):
+                    print('It is a Prime Number.')
+                    speak('It is a Prime Number.')
+                    module.logcat(str(temp) + ' is a prime number')
+                else:
+                    print('It is not a Prime Number')
+                    speak('It is not a Prime Number')
+                    module.logcat(str(temp) + ' is not a prime number')
+            except ValueError:
+                print('Only an integer can be a Prime Number, so this is not a Prime Number')
+                speak('Only an integer can be a Prime Number, so this is not a Prime Number')
+                module.logcat('ValueError while checking for prime: Given Value - ' + str(temp), True)
+
+    elif 'even' in cmd.lower() or 'odd' in cmd.lower():
+        speak('Enter the number to check for even or odd')
+        print('Enter the number to check for even or odd')
+        temp = recognize()
+        if temp != 'None':
+            module.logcat('Checking ' + str(temp) + ' for even or odd.', False)
+            try:
+                temp = int(temp)
+                if SpecialitesFinder.evenorodd(temp):
+                    print('It is an even number.')
+                    speak('It is an even number.')
+                    module.logcat(str(temp) + ' is an even number', False)
+                else:
+                    print('It is an odd number')
+                    speak('It is an odd number')
+                    module.logcat(str(temp) + ' is an odd number', False)
+            except ValueError:
+                print('Whatever you entered seems not be an integer, so yeah.')
+                speak('Whatever you entered seems not be an integer, so yeah.')
 
     elif 'wikipedia' in cmd.lower():
         speak('Searching Wikipedia!....')
@@ -322,25 +346,6 @@ while True:
         url = 'https://www.google.com/search?q=' + cmd
         module.logcat('Opening "' + url + '" in webbrowser', False)
         webbrowser.open(url)
-
-    elif 'even' in cmd.lower() or 'odd' in cmd.lower():
-        speak('Enter the number to check for even or odd')
-        print('Enter the number to check for even or odd')
-        temp = recognize()
-        module.logcat('Checking ' + str(temp) + ' for even or odd.', False)
-        try:
-            temp = int(temp)
-            if SpecialitesFinder.evenorodd(temp):
-                print('It is an even number.')
-                speak('It is an even number.')
-                module.logcat(str(temp) + ' is an even number', False)
-            else:
-                print('It is an odd number')
-                speak('It is an odd number')
-                module.logcat(str(temp) + ' is an odd number', False)
-        except ValueError:
-            print('Whatever you entered seems not be an integer, so yeah.')
-            speak('Whatever you entered seems not be an integer, so yeah.')
 
     elif 'how are you' in cmd.lower() or 'how you doing' in cmd.lower():
         num = randomgenerator(1, 6)
