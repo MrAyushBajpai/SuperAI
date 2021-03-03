@@ -72,11 +72,6 @@ voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[int(config.get('data-value', 'voice'))].id)
 osinfo = str(platform.system()) + ' ' + str(platform.release()) + ' ' + str(platform.version())
 
-# One time Code
-module.logcat('START!!')
-module.logcat('System is ' + str(osinfo))
-
-
 # All the necessary functions
 def randomgenerator(rmin, rmax):
     return random.randint(rmin, rmax)
@@ -110,8 +105,10 @@ def recognize():
 
 # One time code
 if not os.path.exists(config.get('file-path', 'logfilepath')):
-    os.mkdir(config.get('file-path', 'logfilepath'))
+    os.makedirs(config.get('file-path', 'logfilepath'))
 print(module.timeset(), 'Welcome to SuperAI!')
+module.logcat('START!!')
+module.logcat('System is ' + str(osinfo))
 speak(module.timeset())
 speak('Welcome to SuperAI')
 
