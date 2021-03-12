@@ -119,10 +119,14 @@ while True:
         cmd = recognize()
         print(' ')
         if cmd != 'None':
-            module.logcat('Command Entered is -- ' + cmd)
             break
         else:
             continue
+    # Used to check if the command entered is specific to SuperAI
+    if 'super' not in cmd.lower():
+        continue
+    else:
+        module.logcat('Command Entered is -- ' + cmd)
 
     # Checks for the entered command
     if 'search' in cmd.lower():
