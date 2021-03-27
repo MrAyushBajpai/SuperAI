@@ -72,6 +72,7 @@ voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[int(config.get('data-value', 'voice'))].id)
 osinfo = str(platform.system()) + ' ' + str(platform.release()) + ' ' + str(platform.version())
 
+
 # All the necessary functions
 def randomgenerator(rmin, rmax):
     return random.randint(rmin, rmax)
@@ -106,11 +107,11 @@ def recognize():
 # One time code
 if not os.path.exists(config.get('file-path', 'logfilepath')):
     os.makedirs(config.get('file-path', 'logfilepath'))
-print(module.timeset(), 'Welcome to SuperAI!')
+print(module.timeset(), f'Welcome {config.get("user-info", "name")}')
 module.logcat('START!!')
-module.logcat('System is ' + str(osinfo))
+module.logcat(f'System is {str(osinfo)}')
 speak(module.timeset())
-speak('Welcome to SuperAI')
+speak(f'Welcome {config.get("user-info", "name")}')
 
 # Main Loop that runs forever
 while True:
@@ -288,6 +289,19 @@ while True:
         speak('Time is' + strtime)
         module.logcat('Retrived Current time as ' + strtime, False)
 
+    elif 'what is your name' in cmd.lower():
+        print('My Name is SuperAI.')
+        speak('My Name is SuperAI')
+
+    elif 'what is my name' in cmd.lower():
+        name = config.get("user-info", "name")
+        if name != 'to SuperAI':
+            print(f'You are {name}')
+            speak(f'You are {name}')
+        else:
+            print("I don't know what your name is.")
+            speak("I don't know what your name is.")
+
     elif 'what' in cmd.lower():
         query = list(chain(*zip(cmd.split(), cycle(' '))))[:-1]
         if 'what' in query:
@@ -344,9 +358,38 @@ while True:
             webbrowser.open(url)
 
     elif 'how' in cmd.lower() or 'when' in cmd.lower():
-        url = 'https://www.google.com/search?q=' + cmd
-        module.logcat('Opening "' + url + '" in webbrowser', False)
+        url = f'https://www.google.com/search?q={cmd}'
+        module.logcat(f'Opening {url} in webbrowser', False)
         webbrowser.open(url)
+
+    elif 'name' in cmd.lower():
+        while True:
+            print('Please tell me your name')
+            speak('Please tell me your name')
+            name = recognize()
+            if name == 'None':
+                print('Please tell the name again')
+                speak('Please tell the name again')
+                continue
+            while True:
+                print(f'The Name is - {name.title()}. Is that correct? Or you want to change?')
+                speak(f'The Name is - {name.title()}. Is that correct? Or you want to change?')
+                tester = recognize()
+                if tester == 'None':
+                    continue
+                else:
+                    break
+            if 'y' in tester.lower():
+                module.logcat(f'Name changed to -- {name.title()} from --  {config.get("user-info", "name")}', False)
+                config.set("user-info", "name", name.title())
+                with open(r'config.cfg', 'w') as f:
+                    config.write(f)
+                    f.close()
+                print(f'Name is now set to {name.title()}')
+                speak(f'Name is now set to {name.title()}')
+                break
+            else:
+                continue
 
     elif 'how are you' in cmd.lower() or 'how you doing' in cmd.lower():
         num = randomgenerator(1, 6)
