@@ -571,3 +571,12 @@ while True:
         speak('Closing the Program. Hope to see you soon!')
         module.logcat('Program Exit!', False)
         sys.exit()
+
+    else:
+        print("I don't get what you mean..... You want me to search that on the web?")
+        speak("I don't get what you mean..... You want me to search that on the web?")
+        tester = recognize()
+        if 'y' in tester.lower():
+            url = f'https://www.google.com/search?q={cmd}'
+            module.logcat('Opening "' + url + '" in webbrowser', False)
+            webbrowser.open(url)
