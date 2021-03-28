@@ -9,6 +9,6 @@ However to build from the sources, you will need the following Modules. You can 
 2. pyttsx3 (https://pypi.org/project/pyttsx3/)
 4. speechRecognition (https://pypi.org/project/SpeechRecognition/)  
 
-You will need to place the files(SpecialitesFinder.py, module.py and config.cfg) in the folder same as main.py.  
+You will need to place the files(special.py, module.py and config.cfg) in the folder same as main.py.  
 main.py is the file that has to be executed, while the rest are just its complemantry files.  
   
