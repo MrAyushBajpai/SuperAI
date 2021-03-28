@@ -46,6 +46,17 @@ def timeset():
         return 'Good Evening!'
 
 
+def agecalc(day: int, month: int, year: int):
+    if year == 0:
+        return 0
+    current_day = datetime.now().day
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+    if month < current_month or day < current_day:
+        return int(current_year - year - 1)
+    return int(current_year - year)
+
+
 def birthdate(day: int, month: int, year: int):
     mddict = {1: 31, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
     mndict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August',

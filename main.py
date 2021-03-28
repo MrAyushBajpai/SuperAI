@@ -301,6 +301,15 @@ while True:
         else:
             print("I don't know what your name is.")
             speak("I don't know what your name is.")
+    elif 'what' in cmd.lower() and 'age' in cmd.lower():
+        age = module.agecalc(int(config.get("user-info", "day")), int(config.get("user-info", "month")),
+                             int(config.get("user-info", "year")))
+        if age <= 0:
+            print("I don't know your date of birth")
+            speak("I don't know your date of birth")
+        else:
+            print(f'Your age is {age}')
+            speak(f'Your age is {age}')
 
     elif ('what' in cmd.lower() or 'when' in cmd.lower()) and ('birth' in cmd.lower() or 'born' in cmd.lower()):
         try:
