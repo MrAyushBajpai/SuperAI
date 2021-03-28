@@ -6,6 +6,7 @@ from datetime import datetime
 
 # Setting up configparser
 import configparser
+
 config = configparser.ConfigParser()
 configfilepath = r'config.cfg'
 config.read(configfilepath)
@@ -43,3 +44,19 @@ def timeset():
         return 'Good Afternoon!'
     else:
         return 'Good Evening!'
+
+
+def birthdate(day: int, month: int, year: int):
+    mddict = {1: 31, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
+    mndict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August',
+              9: 'September', 10: 'October', 11: 'November', 12: 'December'}
+    if month == 2:
+        if year % 4 == 0:
+            mddict[2] = 29
+        else:
+            mddict[2] = 28
+    if day > mddict[month]:
+        return False
+    if year > int(datetime.now().year):
+        return 'traveller'
+    return f'{day} {mndict[month]}, {year}'

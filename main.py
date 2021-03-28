@@ -302,6 +302,19 @@ while True:
             print("I don't know what your name is.")
             speak("I don't know what your name is.")
 
+    elif ('what' in cmd.lower() or 'when' in cmd.lower()) and ('birth' in cmd.lower() or 'born' in cmd.lower()):
+        try:
+            if config.get("user-info", "day") == '0':
+                print("I don't know your date of birth")
+                speak("I don't know your date of birth")
+            else:
+                tmpdate = module.birthdate(int(config.get("user-info", "day")), int(config.get("user-info", "month")),
+                                           int(config.get("user-info", "year")))
+                print(f'Your Birthdate is {tmpdate}')
+                speak(f'Your Birthdate is {tmpdate}')
+        except Exception:
+            print("I don't know about your date of birth.")
+
     elif 'what' in cmd.lower():
         query = list(chain(*zip(cmd.split(), cycle(' '))))[:-1]
         if 'what' in query:
@@ -390,6 +403,68 @@ while True:
                 break
             else:
                 continue
+
+    elif 'birth' in cmd.lower() and ('date' in cmd.lower() or 'day' in cmd.lower()):
+        while True:
+            print('What is the date you were born(just the day of the month)?')
+            speak('What is the date you were born(just the day of the month)?')
+            day = recognize()
+            try:
+                day = int(day)
+            except ValueError:
+                print("Sorry, Let's Try Again")
+                speak("Sorry, Let's Try Again")
+                continue
+            if 1 <= day <= 31:
+                break
+
+        while True:
+            print('What is the month you were born, in numerical?')
+            speak('What is the month you were born, in numerical?')
+            month = recognize()
+            try:
+                month = int(month)
+            except ValueError:
+                print("Sorry, Let's Try Again")
+                speak("Sorry, Let's Try Again")
+                continue
+            if 1 <= month <= 12:
+                break
+
+        while True:
+            print('What is the year in which you were born?')
+            speak('What is the year in which you were born?')
+            year = recognize()
+            try:
+                year = int(year)
+            except ValueError:
+                print("Sorry, Let's Try Again")
+                speak("Sorry, Let's Try Again")
+                continue
+            break
+        tmpdate = module.birthdate(day, month, year)
+        if not tmpdate:
+            print('Invalid Date. This month does not have these many days!')
+            speak('Invalid Date. This month does not have these many days!')
+        elif tmpdate == 'traveller':
+            print("Are You a Time Traveller? How are you born in the future?")
+            speak("Are You a Time Traveller? How are you born in the future?")
+        else:
+            print(f'Is this correct? {tmpdate}')
+            speak(f'Is this correct?, {tmpdate}')
+            tester = recognize()
+            if 'y' in tester.lower():
+                config.set("user-info", "day", str(day))
+                config.set("user-info", "month", str(month))
+                config.set("user-info", "year", str(year))
+                with open(r'config.cfg', 'w') as f:
+                    config.write(f)
+                    f.close()
+                print(f'Your birthdate has been changed to {tmpdate}')
+                speak(f'Your birthdate has been changed to {tmpdate}')
+            else:
+                print('Your birthdate was not changed!')
+                speak('Your birthdate was not changed!')
 
     elif 'how are you' in cmd.lower() or 'how you doing' in cmd.lower():
         num = randomgenerator(1, 6)
