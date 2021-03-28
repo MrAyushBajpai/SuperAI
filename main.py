@@ -127,6 +127,12 @@ while True:
     if 'super' not in cmd.lower():
         continue
     else:
+        query = list(chain(*zip(cmd.split(), cycle(' '))))[:-1]
+        try:
+            del query[query.index('super')]
+        except Exception:
+            del query[query.index('Super')]
+        cmd = ''.join(query)
         module.logcat('Command Entered is -- ' + cmd)
 
     # Checks for the entered command
@@ -289,66 +295,112 @@ while True:
         speak('Time is' + strtime)
         module.logcat('Retrived Current time as ' + strtime, False)
 
-    elif 'what is your name' in cmd.lower():
-        print('My Name is SuperAI.')
-        speak('My Name is SuperAI')
+    elif 'what' in cmd.lower():
+        if 'what is your name' in cmd.lower():
+            print('My Name is SuperAI.')
+            speak('My Name is SuperAI')
 
-    elif 'what is my name' in cmd.lower():
-        name = config.get("user-info", "name")
-        if name != 'to SuperAI':
-            print(f'You are {name}')
-            speak(f'You are {name}')
-        else:
-            print("I don't know what your name is.")
-            speak("I don't know what your name is.")
-    elif 'what' in cmd.lower() and 'age' in cmd.lower():
-        age = module.agecalc(int(config.get("user-info", "day")), int(config.get("user-info", "month")),
-                             int(config.get("user-info", "year")))
-        if age <= 0:
-            print("I don't know your date of birth")
-            speak("I don't know your date of birth")
-        else:
-            print(f'Your age is {age}')
-            speak(f'Your age is {age}')
-
-    elif ('what' in cmd.lower() or 'when' in cmd.lower()) and ('birth' in cmd.lower() or 'born' in cmd.lower()):
-        try:
-            if config.get("user-info", "day") == '0':
+        elif 'what is my name' in cmd.lower():
+            name = config.get("user-info", "name")
+            if name != 'to SuperAI':
+                print(f'You are {name}')
+                speak(f'You are {name}')
+            else:
+                print("I don't know what your name is.")
+                speak("I don't know what your name is.")
+        elif 'age' in cmd.lower():
+            age = module.agecalc(int(config.get("user-info", "day")), int(config.get("user-info", "month")),
+                                 int(config.get("user-info", "year")))
+            if age <= 0:
                 print("I don't know your date of birth")
                 speak("I don't know your date of birth")
             else:
-                tmpdate = module.birthdate(int(config.get("user-info", "day")), int(config.get("user-info", "month")),
-                                           int(config.get("user-info", "year")))
-                print(f'Your Birthdate is {tmpdate}')
-                speak(f'Your Birthdate is {tmpdate}')
-        except Exception:
-            print("I don't know about your date of birth.")
+                print(f'Your age is {age}')
+                speak(f'Your age is {age}')
 
-    elif 'what' in cmd.lower():
-        query = list(chain(*zip(cmd.split(), cycle(' '))))[:-1]
-        if 'what' in query:
-            tmp1 = query.index('what')
-            if 'is' in query:
-                tmp2 = query.index('is')
-                if tmp1 + 1 == tmp2:
-                    del query[tmp1:tmp2 + 1]
-            elif 'are' in query:
-                tmp2 = query.index('are')
-                if tmp1 + 1 == tmp2:
-                    del query[tmp1:tmp2 + 1]
-            else:
-                del query[tmp1]
-        query = ''.join(query)
-        try:
-            speak('Just a second')
-            results = wikipedia.summary(cmd, sentences=2)
-            print(results)
-            speak('According to Wikipedia')
-            speak(results)
-            module.logcat('Loaded from wikipedia about ' + query, False)
-        except Exception:
-            url = 'https://www.google.com/search?q=' + cmd
-            module.logcat('Opening "' + url + '" in webbrowser', False)
+        elif 'birth' in cmd.lower() or 'born' in cmd.lower():
+            try:
+                if config.get("user-info", "day") == '0':
+                    print("I don't know your date of birth")
+                    speak("I don't know your date of birth")
+                else:
+                    tmpdate = module.birthdate(int(config.get("user-info", "day")), int(config.get("user-info", "month")),
+                                               int(config.get("user-info", "year")))
+                    print(f'Your Birthdate is {tmpdate}')
+                    speak(f'Your Birthdate is {tmpdate}')
+            except Exception:
+                print("I don't know about your date of birth.")
+
+        else:
+            query = list(chain(*zip(cmd.split(), cycle(' '))))[:-1]
+            if 'what' in query:
+                tmp1 = query.index('what')
+                if 'is' in query:
+                    tmp2 = query.index('is')
+                    if tmp1 + 1 == tmp2:
+                        del query[tmp1:tmp2 + 1]
+                elif 'are' in query:
+                    tmp2 = query.index('are')
+                    if tmp1 + 1 == tmp2:
+                        del query[tmp1:tmp2 + 1]
+                else:
+                    del query[tmp1]
+            query = ''.join(query)
+            try:
+                speak('Just a second')
+                results = wikipedia.summary(cmd, sentences=2)
+                print(results)
+                speak('According to Wikipedia')
+                speak(results)
+                module.logcat('Loaded from wikipedia about ' + query, False)
+            except Exception:
+                url = 'https://www.google.com/search?q=' + cmd
+                module.logcat('Opening "' + url + '" in webbrowser', False)
+                webbrowser.open(url)
+
+    elif 'when' in cmd.lower():
+        if 'birth' in cmd.lower() or 'born' in cmd.lower():
+            if 'you' not in cmd.lower():
+                try:
+                    if config.get("user-info", "day") == '0':
+                        print("I don't know your date of birth")
+                        speak("I don't know your date of birth")
+                    else:
+                        tmpdate = module.birthdate(int(config.get("user-info", "day")), int(config.get("user-info", "month")),
+                                                   int(config.get("user-info", "year")))
+                        print(f'Your Birthdate is {tmpdate}')
+                        speak(f'Your Birthdate is {tmpdate}')
+                except Exception:
+                    print("I don't know about your date of birth.")
+        else:
+            url = f'https://www.google.com/search?q={cmd}'
+            module.logcat(f'Opening {url} in webbrowser', False)
+            webbrowser.open(url)
+
+    elif 'how' in cmd.lower():
+        if 'how are you' in cmd.lower() or 'how you doing' in cmd.lower():
+            num = randomgenerator(1, 6)
+            if num == 1:
+                print('I am doing Great! How are You?')
+                speak('I am doing Great! How are You?')
+            elif num == 2:
+                print('I am constantly updated. That\'s how I am doing.')
+                speak('I am constantly updated. That is how I am doing.')
+            elif num == 3:
+                print('My Existence is non emotional. The only thing I do good is probably helping you.')
+                speak('My Existence is non emotional. The only thing I do good is probably helping you.')
+            elif num == 4:
+                print('I may not be the best, but I certainly enjoy being myself!')
+                speak('I may not be the best, but I certainly enjoy being myself!')
+            elif num == 5:
+                print('Good.')
+                speak('Good')
+            elif num == 6:
+                print('With you on my side, I am unstoppable!')
+                speak('With you on my side, I am unstoppable!')
+        else:
+            url = f'https://www.google.com/search?q={cmd}'
+            module.logcat(f'Opening {url} in webbrowser', False)
             webbrowser.open(url)
 
     elif 'who' in cmd.lower():
@@ -375,14 +427,9 @@ while True:
             speak(results)
             module.logcat('Loaded from wikipedia about ' + query, False)
         except Exception:
-            url = 'https://www.google.com/search?q=' + cmd
+            url = f'https://www.google.com/search?q={cmd}'
             module.logcat('Opening "' + url + '" in webbrowser', False)
             webbrowser.open(url)
-
-    elif 'how' in cmd.lower() or 'when' in cmd.lower():
-        url = f'https://www.google.com/search?q={cmd}'
-        module.logcat(f'Opening {url} in webbrowser', False)
-        webbrowser.open(url)
 
     elif 'name' in cmd.lower():
         while True:
@@ -474,27 +521,6 @@ while True:
             else:
                 print('Your birthdate was not changed!')
                 speak('Your birthdate was not changed!')
-
-    elif 'how are you' in cmd.lower() or 'how you doing' in cmd.lower():
-        num = randomgenerator(1, 6)
-        if num == 1:
-            print('I am doing Great! How are You?')
-            speak('I am doing Great! How are You?')
-        elif num == 2:
-            print('I am constantly updated. That\'s how I am doing.')
-            speak('I am constantly updated. That is how I am doing.')
-        elif num == 3:
-            print('My Existence is non emotional. The only thing I do good is probably helping you.')
-            speak('My Existence is non emotional. The only thing I do good is probably helping you.')
-        elif num == 4:
-            print('I may not be the best, but I certainly enjoy being myself!')
-            speak('I may not be the best, but I certainly enjoy being myself!')
-        elif num == 5:
-            print('Good.')
-            speak('Good')
-        elif num == 6:
-            print('With you on my side, I am unstoppable!')
-            speak('With you on my side, I am unstoppable!')
 
     elif 'hello' in cmd.lower() or 'hi' in cmd.lower() or 'howdy' in cmd.lower() or cmd.lower() == 'hey':
         num = randomgenerator(1, 6)
