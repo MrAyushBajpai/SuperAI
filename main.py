@@ -92,6 +92,7 @@ def recognize():
         r.energy_threshold = int(config.get('data-value', 'energy_threshold'))
         audio = r.listen(source)
 
+    # noinspection PyBroadException
     try:
         print('Processing....')
         print(' ')
@@ -128,6 +129,7 @@ while True:
         continue
     else:
         query = list(chain(*zip(cmd.split(), cycle(' '))))[:-1]
+        # noinspection PyBroadException
         try:
             del query[query.index('super')]
         except Exception:
@@ -319,12 +321,14 @@ while True:
                 speak(f'Your age is {age}')
 
         elif 'birth' in cmd.lower() or 'born' in cmd.lower():
+            # noinspection PyBroadException
             try:
                 if config.get("user-info", "day") == '0':
                     print("I don't know your date of birth")
                     speak("I don't know your date of birth")
                 else:
-                    tmpdate = module.birthdate(int(config.get("user-info", "day")), int(config.get("user-info", "month")),
+                    tmpdate = module.birthdate(int(config.get("user-info", "day")),
+                                               int(config.get("user-info", "month")),
                                                int(config.get("user-info", "year")))
                     print(f'Your Birthdate is {tmpdate}')
                     speak(f'Your Birthdate is {tmpdate}')
@@ -346,6 +350,7 @@ while True:
                 else:
                     del query[tmp1]
             query = ''.join(query)
+            # noinspection PyBroadException
             try:
                 speak('Just a second')
                 results = wikipedia.summary(cmd, sentences=2)
@@ -361,12 +366,14 @@ while True:
     elif 'when' in cmd.lower():
         if 'birth' in cmd.lower() or 'born' in cmd.lower():
             if 'you' not in cmd.lower():
+                # noinspection PyBroadException
                 try:
                     if config.get("user-info", "day") == '0':
                         print("I don't know your date of birth")
                         speak("I don't know your date of birth")
                     else:
-                        tmpdate = module.birthdate(int(config.get("user-info", "day")), int(config.get("user-info", "month")),
+                        tmpdate = module.birthdate(int(config.get("user-info", "day")),
+                                                   int(config.get("user-info", "month")),
                                                    int(config.get("user-info", "year")))
                         print(f'Your Birthdate is {tmpdate}')
                         speak(f'Your Birthdate is {tmpdate}')
@@ -419,6 +426,7 @@ while True:
             else:
                 del query[tmp1]
         query = ''.join(query)
+        # noinspection PyBroadException
         try:
             speak('Just a second')
             results = wikipedia.summary(cmd, sentences=2)
