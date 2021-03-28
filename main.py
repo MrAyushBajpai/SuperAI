@@ -51,7 +51,7 @@ except ModuleNotFoundError:
     sys.exit()
 
 try:
-    import SpecialitesFinder
+    import special
 except ModuleNotFoundError:
     print('The file SpecialitesFinder was not found! Are You Sure it is in the same directory?')
     time.sleep(5)
@@ -187,7 +187,7 @@ while True:
         temp = recognize()
         if temp != 'None':
             module.logcat('Checking ' + str(temp) + ' for Palindrome', False)
-            if SpecialitesFinder.palindromechecker(temp):
+            if special.palindromechecker(temp):
                 print('It is a palindrome string')
                 speak('It is a palindrome string')
                 module.logcat(str(temp) + ' is a palindrome string', False)
@@ -203,7 +203,7 @@ while True:
             module.logcat('Checking ' + str(temp) + ' for amrstrong number', False)
             try:
                 temp = int(temp)
-                if SpecialitesFinder.armstrongchecker(temp):
+                if special.armstrongchecker(temp):
                     print('It is an Armstrong Number')
                     speak('It is an Armstrong Number')
                     module.logcat(str(temp) + ' is an armstrong number', False)
@@ -223,7 +223,7 @@ while True:
             module.logcat('Checking ' + str(temp) + ' for prime or not')
             try:
                 temp = int(temp)
-                if SpecialitesFinder.primechecker(temp):
+                if special.primechecker(temp):
                     print('It is a Prime Number.')
                     speak('It is a Prime Number.')
                     module.logcat(str(temp) + ' is a prime number')
@@ -244,7 +244,7 @@ while True:
             module.logcat('Checking ' + str(temp) + ' for even or odd.', False)
             try:
                 temp = int(temp)
-                if SpecialitesFinder.evenorodd(temp):
+                if special.evenorodd(temp):
                     print('It is an even number.')
                     speak('It is an even number.')
                     module.logcat(str(temp) + ' is an even number', False)
