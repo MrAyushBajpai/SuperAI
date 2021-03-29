@@ -41,6 +41,7 @@ except ModuleNotFoundError:
     webbrowser.open('https://pypi.org/project/SpeechRecognition/')
     time.sleep(2)
     sys.exit()
+
 try:
     import module
 except ModuleNotFoundError:
@@ -61,7 +62,6 @@ except ModuleNotFoundError:
 
 # Setting up configparser
 import configparser
-
 config = configparser.ConfigParser()
 configfilepath = r'config.cfg'
 config.read(configfilepath)
@@ -105,14 +105,18 @@ def recognize():
     return command
 
 
-# One time code
+# Create the Logfile if it does not exist
 if not os.path.exists(config.get('file-path', 'logfilepath')):
     os.makedirs(config.get('file-path', 'logfilepath'))
+
+# Welcome the user
 print(module.timeset(), f'Welcome {config.get("user-info", "name")}')
-module.logcat('START!!')
-module.logcat(f'System is {str(osinfo)}')
 speak(module.timeset())
 speak(f'Welcome {config.get("user-info", "name")}')
+
+# Log the start of program, and the system info
+module.logcat('START!!')
+module.logcat(f'System is {str(osinfo)}')
 
 # Main Loop that runs forever
 while True:
@@ -124,6 +128,7 @@ while True:
             break
         else:
             continue
+
     # Used to check if the command entered is specific to SuperAI
     if 'super' not in cmd.lower():
         continue
@@ -318,16 +323,19 @@ while True:
             url = 'https://mail.google.com/'
             module.logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
+
         elif 'outlook' in cmd.lower() or 'hotmail' in cmd.lower():
             speak('Opening Outlook')
             url = 'https://outlook.live.com/'
             module.logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
+
         elif 'yahoo' in cmd.lower() and 'mail' in cmd.lower():
             speak('Opening Yahoo Mail')
             url = 'https://mail.yahoo.com/'
             module.logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
+
         elif 'yahoo' in cmd.lower():
             speak('Opening Yahoo')
             url = 'https://www.yahoo.com/'
@@ -393,6 +401,15 @@ while True:
             module.logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
+        else:
+            print("I don't know what to open. Do you want me to search that on google?")
+            speak("I don't know what to open. Do you want me to search that on google?")
+            tester = recognize()
+            if 'y' in tester.lower():
+                url = f'https://www.google.com/search?q={cmd}'
+                module.logcat(f'Opening {url} in webbrowser')
+                webbrowser.open(url)
+
     elif 'wikipedia' in cmd.lower():
         speak('Searching Wikipedia!....')
         query = cmd.lower().replace('wikipedia', '')
@@ -421,6 +438,7 @@ while True:
             else:
                 print("I don't know what your name is.")
                 speak("I don't know what your name is.")
+
         elif 'age' in cmd.lower():
             age = module.agecalc(int(config.get("user-info", "day")), int(config.get("user-info", "month")),
                                  int(config.get("user-info", "year")))
@@ -470,7 +488,7 @@ while True:
                 speak(results)
                 module.logcat('Loaded from wikipedia about ' + query, False)
             except Exception:
-                url = 'https://www.google.com/search?q=' + cmd
+                url = f'https://www.google.com/search?q={cmd}'
                 module.logcat('Opening "' + url + '" in webbrowser', False)
                 webbrowser.open(url)
 
@@ -558,6 +576,7 @@ while True:
             with open(r'config.cfg', 'w') as f:
                 config.write(f)
                 f.close()
+
         elif 'off' in cmd.lower() or 'stop' in cmd.lower():
             print('Turning off Privacy Mode!')
             speak('Turning off Privacy Mode!')
@@ -637,9 +656,11 @@ while True:
         if not tmpdate:
             print('Invalid Date. This month does not have these many days!')
             speak('Invalid Date. This month does not have these many days!')
+
         elif tmpdate == 'traveller':
             print("Are You a Time Traveller? How are you born in the future?")
             speak("Are You a Time Traveller? How are you born in the future?")
+
         else:
             print(f'Is this correct? {tmpdate}')
             speak(f'Is this correct?, {tmpdate}')
