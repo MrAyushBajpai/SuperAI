@@ -22,18 +22,19 @@ except configparser.NoSectionError:
 
 # Function for logging events and errors
 def logcat(event, iserror=False):
-    now = datetime.now()
-    current_datetime = now.strftime("[%D::%H:%M:%S]")
-    if iserror:
-        lf = open(logfile, 'a')
-        lf.write('@!! ' + current_datetime + ' -- ' + event)
-        lf.write('\n')
-        lf.close()
-    else:
-        lf = open(logfile, 'a+')
-        lf.write(current_datetime + ' -- ' + event)
-        lf.write('\n')
-        lf.close()
+    if config.get("toggles", "keeplog").lower() == 'true':
+        now = datetime.now()
+        current_datetime = now.strftime("[%D::%H:%M:%S]")
+        if iserror:
+            lf = open(logfile, 'a')
+            lf.write('@!! ' + current_datetime + ' -- ' + event)
+            lf.write('\n')
+            lf.close()
+        else:
+            lf = open(logfile, 'a+')
+            lf.write(current_datetime + ' -- ' + event)
+            lf.write('\n')
+            lf.close()
 
 
 def timeset():

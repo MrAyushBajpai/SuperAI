@@ -439,6 +439,22 @@ while True:
             module.logcat('Opening "' + url + '" in webbrowser', False)
             webbrowser.open(url)
 
+    elif 'privacy' in cmd.lower():
+        if 'on' in cmd.lower() or 'start' in cmd.lower():
+            print('Turning on Privacy Mode!')
+            speak('Turning on Privacy Mode!')
+            config.set("toggles", "keeplog", "False")
+            with open(r'config.cfg', 'w') as f:
+                config.write(f)
+                f.close()
+        elif 'off' in cmd.lower() or 'stop' in cmd.lower():
+            print('Turning off Privacy Mode!')
+            speak('Turning off Privacy Mode!')
+            config.set("toggles", "keeplog", "True")
+            with open(r'config.cfg', 'w') as f:
+                config.write(f)
+                f.close()
+
     elif 'name' in cmd.lower():
         while True:
             print('Please tell me your name')
