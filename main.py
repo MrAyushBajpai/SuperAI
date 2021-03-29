@@ -283,6 +283,57 @@ while True:
             module.logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
+        elif 'twitter' in cmd.lower():
+            speak('Opening Twitter')
+            url = 'https://twitter.com/'
+            module.logcat(f'Opening {url} in webbrowser')
+            webbrowser.open(url)
+
+        elif 'reddit' in cmd.lower():
+            speak('Opening Reddit')
+            url = 'https://www.reddit.com/'
+            module.logcat(f'Opening {url} in webbrowser')
+            webbrowser.open(url)
+
+        elif 'bing' in cmd.lower():
+            speak('Opening GitHub')
+            url = 'https://www.bing.com/'
+            module.logcat(f'Opening {url} in webbrowser')
+            webbrowser.open(url)
+
+        elif 'duck' in cmd.lower():
+            speak('Opening DuckDuckGo')
+            url = 'https://duckduckgo.com/'
+            module.logcat(f'Opening {url} in webbrowser')
+            webbrowser.open(url)
+
+        elif 'yandex' in cmd.lower():
+            speak('Opening Yandex')
+            url = 'https://yandex.com/'
+            module.logcat(f'Opening {url} in webbrowser')
+            webbrowser.open(url)
+
+        elif 'gmail' in cmd.lower() or 'email' in cmd.lower():
+            speak('Opening GMail')
+            url = 'https://mail.google.com/'
+            module.logcat(f'Opening {url} in webbrowser')
+            webbrowser.open(url)
+        elif 'outlook' in cmd.lower() or 'hotmail' in cmd.lower():
+            speak('Opening Outlook')
+            url = 'https://outlook.live.com/'
+            module.logcat(f'Opening {url} in webbrowser')
+            webbrowser.open(url)
+        elif 'yahoo' in cmd.lower() and 'mail' in cmd.lower():
+            speak('Opening Yahoo Mail')
+            url = 'https://mail.yahoo.com/'
+            module.logcat(f'Opening {url} in webbrowser')
+            webbrowser.open(url)
+        elif 'yahoo' in cmd.lower():
+            speak('Opening Yahoo')
+            url = 'https://www.yahoo.com/'
+            module.logcat(f'Opening {url} in webbrowser')
+            webbrowser.open(url)
+
         elif 'wik' in cmd.lower() or 'vic' in cmd.lower():
             if 'how' in cmd.lower():
                 speak('Opening Wikihow')
