@@ -258,6 +258,90 @@ while True:
                 print('Whatever you entered seems not be an integer, so yeah.')
                 speak('Whatever you entered seems not be an integer, so yeah.')
 
+    elif 'open' in cmd.lower():
+        if 'google' in cmd.lower():
+            speak('Opening Google')
+            url = 'https://www.google.com'
+            module.logcat(f'Opening {url} in webbrowser')
+            webbrowser.open(url)
+
+        elif 'youtube' in cmd.lower():
+            speak('Opening YouTube')
+            url = 'https://www.youtube.com'
+            module.logcat(f'Opening {url} in webbrowser')
+            webbrowser.open(url)
+
+        elif 'stack' in cmd.lower() or 'overflow' in cmd.lower():
+            speak('Opening Stack Overflow')
+            url = 'https://stackoverflow.com/'
+            module.logcat(f'Opening {url} in webbrowser')
+            webbrowser.open(url)
+
+        elif 'git' in cmd.lower() and 'hub' in cmd.lower():
+            speak('Opening GitHub')
+            url = 'https://github.com'
+            module.logcat(f'Opening {url} in webbrowser')
+            webbrowser.open(url)
+
+        elif 'wik' in cmd.lower() or 'vic' in cmd.lower():
+            if 'how' in cmd.lower():
+                speak('Opening Wikihow')
+                url = 'https://www.wikihow.com/'
+            elif 'common' in cmd.lower():
+                speak('Opeing Wikimedia Commons')
+                url = 'https://commons.wikimedia.org/'
+            elif 'meta' in cmd.lower():
+                speak('Opening Meta Wiki')
+                url = 'https://meta.wikimedia.org/'
+            elif 'incubator' in cmd.lower():
+                speak('Opening Wikimedia Incubator')
+                url = 'https://incubator.wikimedia.org/'
+            elif 'tech' in cmd.lower() or 'cloud' in cmd.lower():
+                speak('Opening Wikitech')
+                url = 'https://wikitech.wikimedia.org/'
+            elif 'foundation' in cmd.lower():
+                speak('Opening Wikimedia Foundation')
+                url = 'https://wikimediafoundation.org/'
+            elif 'wikimedia' in cmd.lower():
+                speak('Opening Wikimedia')
+                url = 'https://www.wikimedia.org/'
+            elif 'mediawiki' in cmd.lower():
+                speak('Opening Mediawiki')
+                url = 'https://www.mediawiki.org/'
+            elif 'tionary' in cmd.lower():
+                speak('Opening Wiktionary')
+                url = 'https://www.wiktionary.org/'
+            elif 'quote' in cmd.lower():
+                speak('Opening Wikiquote')
+                url = 'https://www.wikiquote.org/'
+            elif 'book' in cmd.lower():
+                speak('Opening Wikibooks')
+                url = 'https://www.wikibooks.org/'
+            elif 'source' in cmd.lower():
+                speak('Opening Wikisource')
+                url = 'https://wikisource.org/'
+            elif 'news' in cmd.lower():
+                speak('Opening Wikinews')
+                url = 'https://www.wikinews.org/'
+            elif 'versity' in cmd.lower():
+                speak('Opening Wikiversity')
+                url = 'https://www.wikiversity.org/'
+            elif 'species' in cmd.lower():
+                speak('Opening Wikispecies')
+                url = 'https://species.wikimedia.org/'
+            elif 'data' in cmd.lower():
+                speak('Opening Wikidata')
+                url = 'https://www.wikidata.org/'
+            elif 'voyage' in cmd.lower():
+                speak('Opening Wikivoyage')
+                url = 'https://www.wikivoyage.org/'
+            else:
+                speak('Opening Wikipedia')
+                url = 'https://www.wikipedia.org/'
+
+            module.logcat(f'Opening {url} in webbrowser')
+            webbrowser.open(url)
+
     elif 'wikipedia' in cmd.lower():
         speak('Searching Wikipedia!....')
         query = cmd.lower().replace('wikipedia', '')
@@ -266,30 +350,6 @@ while True:
         speak('According to Wikipedia')
         speak(results)
         module.logcat('Search Wikipedia for ' + query, False)
-
-    elif 'open' in cmd.lower() and 'google' in cmd.lower():
-        speak('Opening Google')
-        url = 'https://www.google.com'
-        module.logcat('Opening "' + url + '" in webbrowser')
-        webbrowser.open(url)
-
-    elif 'open' in cmd.lower() and 'youtube' in cmd.lower():
-        speak('Opening YouTube')
-        url = 'https://www.youtube.com'
-        module.logcat('Opening "' + url + '" in webbrowser')
-        webbrowser.open(url)
-
-    elif 'open' in cmd.lower() and ('stack' in cmd.lower() or 'overflow' in cmd.lower()):
-        speak('Opening Stack Overflow')
-        url = 'https://stackoverflow.com/'
-        module.logcat('Opening "' + url + '" in webbrowser')
-        webbrowser.open(url)
-
-    elif 'open' in cmd.lower() and ('git' in cmd.lower() and 'hub' in cmd.lower()):
-        speak('Opening GitHub')
-        url = 'https://github.com'
-        module.logcat('Opening "' + url + '" in webbrowser')
-        webbrowser.open(url)
 
     elif 'time' in cmd.lower():
         strtime = datetime.datetime.now().strftime('%H %M')
