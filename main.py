@@ -1,5 +1,3 @@
-# This is a simple help assistant/ help bot that allows to do basic things with it.
-
 # All the necessary imports
 from itertools import chain, cycle
 import platform
@@ -43,15 +41,6 @@ except ModuleNotFoundError:
     sys.exit()
 
 try:
-    import module
-except ModuleNotFoundError:
-    print('The file module.py was not found! Are You Sure it is in the same directory?')
-    time.sleep(5)
-    webbrowser.open('https://github.com/MrAyushBajpai/SuperAI/blob/master/module.py')
-    time.sleep(2)
-    sys.exit()
-
-try:
     import special
 except ModuleNotFoundError:
     print('The file SpecialitesFinder was not found! Are You Sure it is in the same directory?')
@@ -62,6 +51,7 @@ except ModuleNotFoundError:
 
 # Setting up configparser
 import configparser
+
 config = configparser.ConfigParser()
 configfilepath = r'config.cfg'
 config.read(configfilepath)
@@ -71,11 +61,71 @@ engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[int(config.get('data-value', 'voice'))].id)
 osinfo = str(platform.system()) + ' ' + str(platform.release()) + ' ' + str(platform.version())
+# noinspection PyBroadException
+try:
+    logfile = os.path.join(config.get('file-path', 'logfilepath'), config.get('file-path', 'logfilename'))
+except Exception:
+    print('There is an issue with the config.cfg file. It either doesn\'t exist, or is modified in a wrong way')
+    time.sleep(5)
+    sys.exit()
 
 
 # All the necessary functions
 def randomgenerator(rmin, rmax):
     return random.randint(rmin, rmax)
+
+
+def timeset():
+    current_hour = int(datetime.datetime.now().hour)
+    if 0 <= current_hour < 12:
+        return 'Good Morning!'
+    elif 12 <= current_hour < 18:
+        return 'Good Afternoon!'
+    else:
+        return 'Good Evening!'
+
+
+def agecalc(days: int, months: int, years: int):
+    if years == 0:
+        return 0
+    current_day = datetime.datetime.now().day
+    current_month = datetime.datetime.now().month
+    current_year = datetime.datetime.now().year
+    if months < current_month or days < current_day:
+        return int(current_year - years - 1)
+    return int(current_year - years)
+
+
+def logcat(event, iserror=False):
+    if config.get("toggles", "keeplog").lower() == 'true':
+        now = datetime.datetime.now()
+        current_datetime = now.strftime("[%D::%H:%M:%S]")
+        if iserror:
+            lf = open(logfile, 'a')
+            lf.write('@!! ' + current_datetime + ' -- ' + event)
+            lf.write('\n')
+            lf.close()
+        else:
+            lf = open(logfile, 'a+')
+            lf.write(current_datetime + ' -- ' + event)
+            lf.write('\n')
+            lf.close()
+
+
+def birthdate(days: int, months: int, years: int):
+    mddict = {1: 31, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
+    mndict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August',
+              9: 'September', 10: 'October', 11: 'November', 12: 'December'}
+    if months == 2:
+        if years % 4 == 0:
+            mddict[2] = 29
+        else:
+            mddict[2] = 28
+    if days > mddict[month]:
+        return False
+    if years > int(datetime.datetime.now().year):
+        return 'traveller'
+    return f'{days} {mndict[months]}, {years}'
 
 
 def speak(statement):
@@ -110,13 +160,13 @@ if not os.path.exists(config.get('file-path', 'logfilepath')):
     os.makedirs(config.get('file-path', 'logfilepath'))
 
 # Welcome the user
-print(module.timeset(), f'Welcome {config.get("user-info", "name")}')
-speak(module.timeset())
+print(timeset(), f'Welcome {config.get("user-info", "name")}')
+speak(timeset())
 speak(f'Welcome {config.get("user-info", "name")}')
 
 # Log the start of program, and the system info
-module.logcat('START!!')
-module.logcat(f'System is {str(osinfo)}')
+logcat('START!!')
+logcat(f'System is {str(osinfo)}')
 
 # Main Loop that runs forever
 while True:
@@ -140,7 +190,7 @@ while True:
         except Exception:
             del query[query.index('Super')]
         cmd = ''.join(query)
-        module.logcat('Command Entered is -- ' + cmd)
+        logcat('Command Entered is -- ' + cmd)
 
     # Checks for the entered command
     if 'search' in cmd.lower():
@@ -167,22 +217,22 @@ while True:
             del query[query.index('search')]
             query = ''.join(query)
             url = 'https://www.google.com/search?q=' + query
-            module.logcat('Opening "' + url + '" in webbrowser')
+            logcat('Opening "' + url + '" in webbrowser')
             webbrowser.open(url)
         elif tester == 'bing':
             query = ''.join(query)
             url = 'https://www.bing.com/search?q=' + query
-            module.logcat('Opening "' + url + '" in webbrowser')
+            logcat('Opening "' + url + '" in webbrowser')
             webbrowser.open(url)
         elif tester == 'duckduckgo' or tester == 'duck':
             query = ''.join(query)
             url = 'https://duckduckgo.com/?q=' + query
-            module.logcat('Opening "' + url + '" in webbrowser')
+            logcat('Opening "' + url + '" in webbrowser')
             webbrowser.open(url)
         elif tester == 'yahoo':
             query = ''.join(query)
             url = 'https://search.yahoo.com/search?p=' + query
-            module.logcat('Opening "' + url + '" in webbrowser')
+            logcat('Opening "' + url + '" in webbrowser')
             webbrowser.open(url)
 
     elif 'operating system' in cmd.lower():
@@ -193,72 +243,72 @@ while True:
         speak('Enter the string to check for Palindrome')
         temp = recognize()
         if temp != 'None':
-            module.logcat('Checking ' + str(temp) + ' for Palindrome', False)
+            logcat('Checking ' + str(temp) + ' for Palindrome', False)
             if special.palindromechecker(temp):
                 print('It is a palindrome string')
                 speak('It is a palindrome string')
-                module.logcat(str(temp) + ' is a palindrome string', False)
+                logcat(str(temp) + ' is a palindrome string', False)
             else:
                 print('It is not a palindrome string')
                 speak('It is not a palindrome string')
-                module.logcat(str(temp) + ' is not a palindrome string', False)
+                logcat(str(temp) + ' is not a palindrome string', False)
 
     elif 'armstrong' in cmd.lower() and 'check' in cmd.lower():
         speak('Enter the number to check for Armstrong: ')
         temp = recognize()
         if temp != 'None':
-            module.logcat('Checking ' + str(temp) + ' for amrstrong number', False)
+            logcat('Checking ' + str(temp) + ' for amrstrong number', False)
             try:
                 temp = int(temp)
                 if special.armstrongchecker(temp):
                     print('It is an Armstrong Number')
                     speak('It is an Armstrong Number')
-                    module.logcat(str(temp) + ' is an armstrong number', False)
+                    logcat(str(temp) + ' is an armstrong number', False)
                 else:
                     print('It is not an Armstrong Number')
                     speak('It is not an Armstrong Number')
-                    module.logcat(str(temp) + ' is not an armstrong number', False)
+                    logcat(str(temp) + ' is not an armstrong number', False)
             except ValueError:
                 print('Only an Integer can be an armstrong number, so this is not an Armstrong number')
                 speak('Only an Integer can be an armstrong number, so this is not an Armstrong number')
-                module.logcat('ValueError while checking for Armstrong Number: Given Value - ' + str(temp), True)
+                logcat('ValueError while checking for Armstrong Number: Given Value - ' + str(temp), True)
 
     elif 'prime' in cmd.lower() and 'check' in cmd.lower():
         speak('Enter the number to check for Prime Number')
         temp = recognize()
         if temp != 'None':
-            module.logcat('Checking ' + str(temp) + ' for prime or not')
+            logcat('Checking ' + str(temp) + ' for prime or not')
             try:
                 temp = int(temp)
                 if special.primechecker(temp):
                     print('It is a Prime Number.')
                     speak('It is a Prime Number.')
-                    module.logcat(str(temp) + ' is a prime number')
+                    logcat(str(temp) + ' is a prime number')
                 else:
                     print('It is not a Prime Number')
                     speak('It is not a Prime Number')
-                    module.logcat(str(temp) + ' is not a prime number')
+                    logcat(str(temp) + ' is not a prime number')
             except ValueError:
                 print('Only an integer can be a Prime Number, so this is not a Prime Number')
                 speak('Only an integer can be a Prime Number, so this is not a Prime Number')
-                module.logcat('ValueError while checking for prime: Given Value - ' + str(temp), True)
+                logcat('ValueError while checking for prime: Given Value - ' + str(temp), True)
 
     elif 'even' in cmd.lower() or 'odd' in cmd.lower():
         speak('Enter the number to check for even or odd')
         print('Enter the number to check for even or odd')
         temp = recognize()
         if temp != 'None':
-            module.logcat('Checking ' + str(temp) + ' for even or odd.', False)
+            logcat('Checking ' + str(temp) + ' for even or odd.', False)
             try:
                 temp = int(temp)
                 if special.evenorodd(temp):
                     print('It is an even number.')
                     speak('It is an even number.')
-                    module.logcat(str(temp) + ' is an even number', False)
+                    logcat(str(temp) + ' is an even number', False)
                 else:
                     print('It is an odd number')
                     speak('It is an odd number')
-                    module.logcat(str(temp) + ' is an odd number', False)
+                    logcat(str(temp) + ' is an odd number', False)
             except ValueError:
                 print('Whatever you entered seems not be an integer, so yeah.')
                 speak('Whatever you entered seems not be an integer, so yeah.')
@@ -267,79 +317,79 @@ while True:
         if 'google' in cmd.lower():
             speak('Opening Google')
             url = 'https://www.google.com'
-            module.logcat(f'Opening {url} in webbrowser')
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
         elif 'youtube' in cmd.lower():
             speak('Opening YouTube')
             url = 'https://www.youtube.com'
-            module.logcat(f'Opening {url} in webbrowser')
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
         elif 'stack' in cmd.lower() or 'overflow' in cmd.lower():
             speak('Opening Stack Overflow')
             url = 'https://stackoverflow.com/'
-            module.logcat(f'Opening {url} in webbrowser')
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
         elif 'git' in cmd.lower() and 'hub' in cmd.lower():
             speak('Opening GitHub')
             url = 'https://github.com'
-            module.logcat(f'Opening {url} in webbrowser')
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
         elif 'twitter' in cmd.lower():
             speak('Opening Twitter')
             url = 'https://twitter.com/'
-            module.logcat(f'Opening {url} in webbrowser')
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
         elif 'reddit' in cmd.lower():
             speak('Opening Reddit')
             url = 'https://www.reddit.com/'
-            module.logcat(f'Opening {url} in webbrowser')
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
         elif 'bing' in cmd.lower():
             speak('Opening GitHub')
             url = 'https://www.bing.com/'
-            module.logcat(f'Opening {url} in webbrowser')
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
         elif 'duck' in cmd.lower():
             speak('Opening DuckDuckGo')
             url = 'https://duckduckgo.com/'
-            module.logcat(f'Opening {url} in webbrowser')
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
         elif 'yandex' in cmd.lower():
             speak('Opening Yandex')
             url = 'https://yandex.com/'
-            module.logcat(f'Opening {url} in webbrowser')
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
         elif 'gmail' in cmd.lower() or 'email' in cmd.lower():
             speak('Opening GMail')
             url = 'https://mail.google.com/'
-            module.logcat(f'Opening {url} in webbrowser')
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
         elif 'outlook' in cmd.lower() or 'hotmail' in cmd.lower():
             speak('Opening Outlook')
             url = 'https://outlook.live.com/'
-            module.logcat(f'Opening {url} in webbrowser')
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
         elif 'yahoo' in cmd.lower() and 'mail' in cmd.lower():
             speak('Opening Yahoo Mail')
             url = 'https://mail.yahoo.com/'
-            module.logcat(f'Opening {url} in webbrowser')
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
         elif 'yahoo' in cmd.lower():
             speak('Opening Yahoo')
             url = 'https://www.yahoo.com/'
-            module.logcat(f'Opening {url} in webbrowser')
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
         elif 'wik' in cmd.lower() or 'vic' in cmd.lower():
@@ -398,7 +448,7 @@ while True:
                 speak('Opening Wikipedia')
                 url = 'https://www.wikipedia.org/'
 
-            module.logcat(f'Opening {url} in webbrowser')
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
 
         else:
@@ -407,7 +457,7 @@ while True:
             tester = recognize()
             if 'y' in tester.lower():
                 url = f'https://www.google.com/search?q={cmd}'
-                module.logcat(f'Opening {url} in webbrowser')
+                logcat(f'Opening {url} in webbrowser')
                 webbrowser.open(url)
 
     elif 'wikipedia' in cmd.lower():
@@ -417,13 +467,13 @@ while True:
         print(results)
         speak('According to Wikipedia')
         speak(results)
-        module.logcat('Search Wikipedia for ' + query, False)
+        logcat('Search Wikipedia for ' + query, False)
 
     elif 'time' in cmd.lower():
         strtime = datetime.datetime.now().strftime('%H %M')
         print(datetime.datetime.now().strftime('%H:%M'))
         speak('Time is' + strtime)
-        module.logcat('Retrived Current time as ' + strtime, False)
+        logcat('Retrived Current time as ' + strtime, False)
 
     elif 'what' in cmd.lower():
         if 'what is your name' in cmd.lower():
@@ -440,8 +490,8 @@ while True:
                 speak("I don't know what your name is.")
 
         elif 'age' in cmd.lower():
-            age = module.agecalc(int(config.get("user-info", "day")), int(config.get("user-info", "month")),
-                                 int(config.get("user-info", "year")))
+            age = agecalc(int(config.get("user-info", "day")), int(config.get("user-info", "month")),
+                          int(config.get("user-info", "year")))
             if age <= 0:
                 print("I don't know your date of birth")
                 speak("I don't know your date of birth")
@@ -456,9 +506,9 @@ while True:
                     print("I don't know your date of birth")
                     speak("I don't know your date of birth")
                 else:
-                    tmpdate = module.birthdate(int(config.get("user-info", "day")),
-                                               int(config.get("user-info", "month")),
-                                               int(config.get("user-info", "year")))
+                    tmpdate = birthdate(int(config.get("user-info", "day")),
+                                        int(config.get("user-info", "month")),
+                                        int(config.get("user-info", "year")))
                     print(f'Your Birthdate is {tmpdate}')
                     speak(f'Your Birthdate is {tmpdate}')
             except Exception:
@@ -486,10 +536,10 @@ while True:
                 print(results)
                 speak('According to Wikipedia')
                 speak(results)
-                module.logcat('Loaded from wikipedia about ' + query, False)
+                logcat('Loaded from wikipedia about ' + query, False)
             except Exception:
                 url = f'https://www.google.com/search?q={cmd}'
-                module.logcat('Opening "' + url + '" in webbrowser', False)
+                logcat('Opening "' + url + '" in webbrowser', False)
                 webbrowser.open(url)
 
     elif 'when' in cmd.lower():
@@ -501,16 +551,16 @@ while True:
                         print("I don't know your date of birth")
                         speak("I don't know your date of birth")
                     else:
-                        tmpdate = module.birthdate(int(config.get("user-info", "day")),
-                                                   int(config.get("user-info", "month")),
-                                                   int(config.get("user-info", "year")))
+                        tmpdate = birthdate(int(config.get("user-info", "day")),
+                                            int(config.get("user-info", "month")),
+                                            int(config.get("user-info", "year")))
                         print(f'Your Birthdate is {tmpdate}')
                         speak(f'Your Birthdate is {tmpdate}')
                 except Exception:
                     print("I don't know about your date of birth.")
         else:
             url = f'https://www.google.com/search?q={cmd}'
-            module.logcat(f'Opening {url} in webbrowser', False)
+            logcat(f'Opening {url} in webbrowser', False)
             webbrowser.open(url)
 
     elif 'how' in cmd.lower():
@@ -536,7 +586,7 @@ while True:
                 speak('With you on my side, I am unstoppable!')
         else:
             url = f'https://www.google.com/search?q={cmd}'
-            module.logcat(f'Opening {url} in webbrowser', False)
+            logcat(f'Opening {url} in webbrowser', False)
             webbrowser.open(url)
 
     elif 'who' in cmd.lower():
@@ -562,10 +612,10 @@ while True:
             print(results)
             speak('According to Wikipedia')
             speak(results)
-            module.logcat('Loaded from wikipedia about ' + query, False)
+            logcat('Loaded from wikipedia about ' + query, False)
         except Exception:
             url = f'https://www.google.com/search?q={cmd}'
-            module.logcat('Opening "' + url + '" in webbrowser', False)
+            logcat('Opening "' + url + '" in webbrowser', False)
             webbrowser.open(url)
 
     elif 'privacy' in cmd.lower():
@@ -603,7 +653,7 @@ while True:
                 else:
                     break
             if 'y' in tester.lower():
-                module.logcat(f'Name changed to -- {name.title()} from --  {config.get("user-info", "name")}', False)
+                logcat(f'Name changed to -- {name.title()} from --  {config.get("user-info", "name")}', False)
                 config.set("user-info", "name", name.title())
                 with open(r'config.cfg', 'w') as f:
                     config.write(f)
@@ -652,7 +702,7 @@ while True:
                 speak("Sorry, Let's Try Again")
                 continue
             break
-        tmpdate = module.birthdate(day, month, year)
+        tmpdate = birthdate(day, month, year)
         if not tmpdate:
             print('Invalid Date. This month does not have these many days!')
             speak('Invalid Date. This month does not have these many days!')
@@ -698,26 +748,35 @@ while True:
         elif num == 6:
             print('Bonjour! Nice to Meet You.')
             speak('Bonjour! Nice to Meet You.')
+    elif 'good' in cmd.lower():
+        if 'morning' in cmd.lower():
+            print('Good Morning!')
+            speak('Good Morning')
 
-    elif 'morning' in cmd.lower():
-        print('Good Morning!')
-        speak('Good Morning')
+        elif 'afternoon' in cmd.lower():
+            print('Good Afternoon!')
+            speak('Good Afternoon')
 
-    elif 'afternoon' in cmd.lower():
-        print('Good Afternoon!')
-        speak('Good Afternoon')
-    elif 'evening' in cmd.lower():
-        print('Good Evening!')
-        speak('Good Evening')
+        elif 'evening' in cmd.lower():
+            print('Good Evening!')
+            speak('Good Evening')
 
-    elif 'night' in cmd.lower():
-        print('Good Night!')
-        speak('Good Night')
+        elif 'night' in cmd.lower():
+            print('Good Night!')
+            speak('Good Night')
+
+        elif 'day' in cmd.lower():
+            print('Have a nice day')
+            speak('Have a nice day')
+
+        elif 'lord' in cmd.lower():
+            print('All Hail The Lord')
+            speak('All Hail The Lord')
 
     elif 'quit' in cmd.lower() or 'exit' in cmd.lower() or ('close' in cmd.lower() and 'program' in cmd.lower()):
         print('Closing the Program. Hope to see you soon!')
         speak('Closing the Program. Hope to see you soon!')
-        module.logcat('Program Exit!', False)
+        logcat('Program Exit!')
         sys.exit()
 
     else:
@@ -726,5 +785,6 @@ while True:
         tester = recognize()
         if 'y' in tester.lower():
             url = f'https://www.google.com/search?q={cmd}'
-            module.logcat('Opening "' + url + '" in webbrowser', False)
+            logcat(f'Opening {url} in webbrowser')
             webbrowser.open(url)
+            speak('Searching')
