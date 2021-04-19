@@ -558,6 +558,9 @@ while True:
                         speak(f'Your Birthdate is {tmpdate}')
                 except Exception:
                     print("I don't know about your date of birth.")
+            else:
+                print('I was born on 28th February, 2021')
+                speak('I was born on 28th February, 2021')
         else:
             url = f'https://www.google.com/search?q={cmd}'
             logcat(f'Opening {url} in webbrowser', False)
@@ -665,68 +668,80 @@ while True:
                 continue
 
     elif 'birth' in cmd.lower() and ('date' in cmd.lower() or 'day' in cmd.lower()):
-        while True:
-            print('What is the date you were born(just the day of the month)?')
-            speak('What is the date you were born(just the day of the month)?')
-            day = recognize()
-            try:
-                day = int(day)
-            except ValueError:
-                print("Sorry, Let's Try Again")
-                speak("Sorry, Let's Try Again")
-                continue
-            if 1 <= day <= 31:
+        if 'happy' not in cmd.lower():
+            while True:
+                print('What is the date you were born(just the day of the month)?')
+                speak('What is the date you were born(just the day of the month)?')
+                day = recognize()
+                try:
+                    day = int(day)
+                except ValueError:
+                    print("Sorry, Let's Try Again")
+                    speak("Sorry, Let's Try Again")
+                    continue
+                if 1 <= day <= 31:
+                    break
+
+            while True:
+                print('What is the month you were born, in numerical?')
+                speak('What is the month you were born, in numerical?')
+                month = recognize()
+                try:
+                    month = int(month)
+                except ValueError:
+                    print("Sorry, Let's Try Again")
+                    speak("Sorry, Let's Try Again")
+                    continue
+                if 1 <= month <= 12:
+                    break
+
+            while True:
+                print('What is the year in which you were born?')
+                speak('What is the year in which you were born?')
+                year = recognize()
+                try:
+                    year = int(year)
+                except ValueError:
+                    print("Sorry, Let's Try Again")
+                    speak("Sorry, Let's Try Again")
+                    continue
                 break
+            tmpdate = birthdate(day, month, year)
+            if not tmpdate:
+                print('Invalid Date. This month does not have these many days!')
+                speak('Invalid Date. This month does not have these many days!')
 
-        while True:
-            print('What is the month you were born, in numerical?')
-            speak('What is the month you were born, in numerical?')
-            month = recognize()
-            try:
-                month = int(month)
-            except ValueError:
-                print("Sorry, Let's Try Again")
-                speak("Sorry, Let's Try Again")
-                continue
-            if 1 <= month <= 12:
-                break
+            elif tmpdate == 'traveller':
+                print("Are You a Time Traveller? How are you born in the future?")
+                speak("Are You a Time Traveller? How are you born in the future?")
 
-        while True:
-            print('What is the year in which you were born?')
-            speak('What is the year in which you were born?')
-            year = recognize()
-            try:
-                year = int(year)
-            except ValueError:
-                print("Sorry, Let's Try Again")
-                speak("Sorry, Let's Try Again")
-                continue
-            break
-        tmpdate = birthdate(day, month, year)
-        if not tmpdate:
-            print('Invalid Date. This month does not have these many days!')
-            speak('Invalid Date. This month does not have these many days!')
-
-        elif tmpdate == 'traveller':
-            print("Are You a Time Traveller? How are you born in the future?")
-            speak("Are You a Time Traveller? How are you born in the future?")
-
-        else:
-            print(f'Is this correct? {tmpdate}')
-            speak(f'Is this correct?, {tmpdate}')
-            tester = recognize()
-            if 'y' in tester.lower():
-                config.set("user-info", "day", str(day))
-                config.set("user-info", "month", str(month))
-                config.set("user-info", "year", str(year))
-                with open(r'config.cfg', 'w') as f:
-                    config.write(f)
-                    f.close()
-                print(f'Your birthdate has been changed to {tmpdate}')
-                speak(f'Your birthdate has been changed to {tmpdate}')
             else:
-                print('Your birthdate was not changed!')
-                speak('Your birthdate was not changed!')
+                print(f'Is this correct? {tmpdate}')
+                speak(f'Is this correct?, {tmpdate}')
+                tester = recognize()
+                if 'y' in tester.lower():
+                    config.set("user-info", "day", str(day))
+                    config.set("user-info", "month", str(month))
+                    config.set("user-info", "year", str(year))
+                    with open(r'config.cfg', 'w') as f:
+                        config.write(f)
+                        f.close()
+                    print(f'Your birthdate has been changed to {tmpdate}')
+                    speak(f'Your birthdate has been changed to {tmpdate}')
+                else:
+                    print('Your birthdate was not changed!')
+                    speak('Your birthdate was not changed!')
+        else:
+            if datetime.datetime.now().day == 28 and datetime.datetime.now().month == 2:
+                print(
+                    "Thank You Very Much! I would invite you to my party but I currently have a lot of work helping "
+                    "my masters, so I don't have time for party")
+                speak(
+                    "Thank You Very Much! I would invite you to my party but I currently have a lot of work helping "
+                    "my masters, so I don't have time for party")
+            else:
+                print('Thank You So Much! But my Birthday is on 28th February.')
+                speak('Thank You So Much! But my Birthday is on 28th February.')
 
     elif 'hello' in cmd.lower() or 'hi' in cmd.lower() or 'howdy' in cmd.lower() or cmd.lower() == 'hey':
         num = randomgenerator(1, 6)
